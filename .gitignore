@@ -1,0 +1,9 @@
+*.pyc
+Badania/
+*.db
+hand/
+handy-master/
+*.avi
+detectHand.py
+detectVidHand.py
+plotHistogram.py
