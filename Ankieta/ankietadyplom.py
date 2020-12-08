@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 import sqlite3
 from pprint import pprint
+from shutil import copyfile
+import os
 
 app = Flask(__name__)
 
@@ -49,6 +51,11 @@ def wyslij():
     )
     connection.commit()
 
+    if os.path.exists("ankieta-copy.db"):
+        os.remove("ankieta-copy.db")
+
+    copyfile("ankieta.db", "ankieta-copy.db")
+
     return render_template("ankietaKoniec.html")
 
 
@@ -60,10 +67,10 @@ def raportWyslij():
     connection = sqlite3.connect("ankieta.db")
     cursor = connection.cursor()
     cursor.execute(
-        "INSERT INTO Ankieta (TempBadanego, TetnoPoczatkowe, CisSkurczPoczatkowe, \
-                    CisRozkurczPoczatkowe, TempWodyDo1Badania, TetnoPo1Badaniu, CisSkurczPo1Badaniu, \
-                    CisRozkurczPo1Badaniu, TempWodyDo2Badania, TetnoPo2Badaniu, CisSkurczPo2Badaniu, CisRozkurczPo2Badaniu) \
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE Id=?",
+        "UPDATE Ankieta SET TempBadanego=?, TetnoPoczatkowe=?, CisSkurczPoczatkowe=?, \
+                    CisRozkurczPoczatkowe=?, TempWodyDo1Badania=?, TetnoPo1Badaniu=?, CisSkurczPo1Badaniu=?, \
+                    CisRozkurczPo1Badaniu=?, TempWodyDo2Badania=?, TetnoPo2Badaniu=?, CisSkurczPo2Badaniu=?, \
+                    CisRozkurczPo2Badaniu=? WHERE Id=?",
         [
             float(req_data["tempBadanego"]),
             int(req_data["tetnoPoczatkowe"]),
@@ -81,6 +88,8 @@ def raportWyslij():
         ],
     )
     connection.commit()
+
+    return render_template("ankietaKoniec.html")
 
 
 if __name__ == "__main__":
