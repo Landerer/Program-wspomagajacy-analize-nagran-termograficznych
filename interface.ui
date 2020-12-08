@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Oprogramowanie wspomagające diagnozę objawu Raynauda</string>
   </property>
   <widget class="QPushButton" name="exitButton">
    <property name="geometry">
@@ -156,16 +156,6 @@
     <string>Wyświetl konkretną klatkę filmu</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="dataBaseText">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>366</y>
-     <width>551</width>
-     <height>221</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QPushButton" name="showDataBase">
    <property name="geometry">
     <rect>
@@ -188,6 +178,42 @@
    </property>
    <property name="checked">
     <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="chooseUser">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>450</y>
+     <width>291</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="chooseUserLabel">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>430</y>
+     <width>161</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Wybierz użytkownika</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>370</y>
+     <width>491</width>
+     <height>221</height>
+    </rect>
    </property>
   </widget>
  </widget>

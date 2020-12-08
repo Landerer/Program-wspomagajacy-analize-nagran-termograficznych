@@ -62,9 +62,6 @@ class Ui_Application(object):
         self.ifShowFrame = QtWidgets.QCheckBox(Application)
         self.ifShowFrame.setGeometry(QtCore.QRect(640, 80, 231, 20))
         self.ifShowFrame.setObjectName("ifShowFrame")
-        self.dataBaseText = QtWidgets.QTextEdit(Application)
-        self.dataBaseText.setGeometry(QtCore.QRect(20, 366, 551, 221))
-        self.dataBaseText.setObjectName("dataBaseText")
         self.showDataBase = QtWidgets.QPushButton(Application)
         self.showDataBase.setGeometry(QtCore.QRect(600, 370, 291, 41))
         font = QtGui.QFont()
@@ -73,6 +70,16 @@ class Ui_Application(object):
         self.showDataBase.setCheckable(False)
         self.showDataBase.setChecked(False)
         self.showDataBase.setObjectName("showDataBase")
+        self.chooseUser = QtWidgets.QComboBox(Application)
+        self.chooseUser.setGeometry(QtCore.QRect(600, 450, 291, 22))
+        self.chooseUser.setObjectName("chooseUser")
+        self.chooseUserLabel = QtWidgets.QLabel(Application)
+        self.chooseUserLabel.setGeometry(QtCore.QRect(600, 430, 161, 16))
+        self.chooseUserLabel.setObjectName("chooseUserLabel")
+        self.textEdit = QtWidgets.QTextEdit(Application)
+        self.textEdit.setEnabled(False)
+        self.textEdit.setGeometry(QtCore.QRect(20, 370, 491, 221))
+        self.textEdit.setObjectName("textEdit")
 
         self.retranslateUi(Application)
         QtCore.QMetaObject.connectSlotsByName(Application)
@@ -88,6 +95,7 @@ class Ui_Application(object):
         self.clearScene.setText(_translate("Application", "Wyczyść obraz"))
         self.ifShowFrame.setText(_translate("Application", "Wyświetl konkretną klatkę filmu"))
         self.showDataBase.setText(_translate("Application", "Wyświetl dane z bazy danych"))
+        self.chooseUserLabel.setText(_translate("Application", "Wybierz użytkownika"))
 
 
 if __name__ == "__main__":
