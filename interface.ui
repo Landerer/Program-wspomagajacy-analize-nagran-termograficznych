@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>914</width>
-    <height>605</height>
+    <width>1053</width>
+    <height>841</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="exitButton">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>550</y>
+     <x>740</x>
+     <y>780</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -37,7 +37,7 @@
   <widget class="QPushButton" name="pickDirectory">
    <property name="geometry">
     <rect>
-     <x>600</x>
+     <x>740</x>
      <y>20</y>
      <width>291</width>
      <height>41</height>
@@ -64,42 +64,11 @@
     <string>Wybierz plik wideo</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="numOfFrame">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>780</x>
-     <y>110</y>
-     <width>121</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="numOfFrameLabel">
-   <property name="geometry">
-    <rect>
-     <x>570</x>
-     <y>110</y>
-     <width>211</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>8</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Podaj numer klatki do wyświetlenia:</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="showTemperatureDiagram">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>240</y>
+     <x>740</x>
+     <y>150</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -122,8 +91,8 @@
   <widget class="QPushButton" name="clearScene">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>190</y>
+     <x>740</x>
+     <y>100</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -143,24 +112,11 @@
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QCheckBox" name="ifShowFrame">
-   <property name="geometry">
-    <rect>
-     <x>640</x>
-     <y>80</y>
-     <width>231</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Wyświetl konkretną klatkę filmu</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="showDataBase">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>370</y>
+     <x>740</x>
+     <y>420</y>
      <width>291</width>
      <height>41</height>
     </rect>
@@ -183,8 +139,8 @@
   <widget class="QComboBox" name="chooseUser">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>450</y>
+     <x>740</x>
+     <y>500</y>
      <width>291</width>
      <height>22</height>
     </rect>
@@ -193,14 +149,14 @@
   <widget class="QLabel" name="chooseUserLabel">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>430</y>
+     <x>740</x>
+     <y>480</y>
      <width>161</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Wybierz użytkownika</string>
+    <string>Wybierz użytkownika:</string>
    </property>
   </widget>
   <widget class="QTextEdit" name="userData">
@@ -210,10 +166,17 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>370</y>
-     <width>511</width>
-     <height>221</height>
+     <y>420</y>
+     <width>671</width>
+     <height>401</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
   </widget>
  </widget>

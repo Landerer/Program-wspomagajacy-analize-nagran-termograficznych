@@ -3,7 +3,7 @@ import sqlite3
 from interface import Ui_Application
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QRubberBand, QFileDialog
-from PyQt5.QtGui import QImage, QPixmap, QMouseEvent
+from PyQt5.QtGui import QImage, QPixmap, QMouseEvent, QColor
 from PyQt5.QtCore import Qt, QRect, QSize, QUrl, QSizeF
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
@@ -46,6 +46,7 @@ class Application(Ui_Application):
         self.showDataBase.clicked.connect(self.showDataBaseClick)
 
         self.chooseUser.currentTextChanged.connect(self.onUserChosen)
+        self.userData.setTextColor(QColor(0, 0, 0))
 
     def createImageView(self, mainWindow):
         self.image = QImage(300, 1000, QImage.Format_RGB32)
@@ -57,7 +58,7 @@ class Application(Ui_Application):
         # self.scene.addPixmap(self.pixmap)
 
         self.graphicsView = ImageView(mainWindow)
-        self.graphicsView.setGeometry(QtCore.QRect(20, 20, 511, 331))
+        self.graphicsView.setGeometry(QtCore.QRect(20, 20, 681, 401))
         self.graphicsView.setObjectName("graphicsView")
         self.graphicsView.setScene(self.scene)
 
@@ -65,7 +66,7 @@ class Application(Ui_Application):
         self.mediaPlayer = QMediaPlayer(mainWindow)
         self.videoItem = QGraphicsVideoItem()
         self.videoSize = self.graphicsView.size()
-        print(self.videoSize)  # zwraca PyQt5.QtCore.QSize(511, 331)
+        print(self.videoSize)
         self.vidSizeF = QSizeF(self.videoSize)
         self.videoItem.setSize(self.vidSizeF)
 
@@ -125,7 +126,9 @@ class Application(Ui_Application):
             userData = cursor.execute(
                 "SELECT * FROM Ankieta WHERE Id=?", [userId]
             ).fetchall()[0]
-            self.userData.setText(f"Id: {userData['Id']}\nPłeć: {userData['Plec']}")
+            self.userData.setText(
+                f"Id: {userData['Id']}\nPłeć: {userData['Plec']}\nWiek: {userData['Wiek']}\nWojewództwo zamieszkania: {userData['Wojewodztwo']}\nJak często marzną dłonie/stopy: {userData['Marzniecie']}\nJak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}\nJak często bierze zimne kąpiele: {userData['ZimneKapiele']}\nJak często morsuje: {userData['Morsowanie']}\nChoroby: {userData['Choroby']}\nPrzyjmowane leki: {userData['Leki']}\nTemperatura badanego: {userData['TempBadanego']}\nTetno początkowe badanego: {userData['TetnoPoczatkowe']}\nCiśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']}\nTemperatura wody przed 1 badaniem: {userData['TempWodyDo1Badania']}\nTętno po 1 badaniu: {userData['TetnoPo1Badaniu']}\nCiśnienie po 1 badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']}\nTemperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']}\nTętno po drugim badaniu: {userData['TetnoPo2Badaniu']}\nCiśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']}"
+            )
 
 
 if __name__ == "__main__":
