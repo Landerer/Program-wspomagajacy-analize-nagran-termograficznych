@@ -203,7 +203,7 @@
     <string>Wybierz użytkownika</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="textEdit">
+  <widget class="QTextEdit" name="userData">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -211,7 +211,7 @@
     <rect>
      <x>20</x>
      <y>370</y>
-     <width>491</width>
+     <width>511</width>
      <height>221</height>
     </rect>
    </property>

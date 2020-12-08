@@ -46,8 +46,7 @@ class Application(Ui_Application):
         self.exitButton.clicked.connect(mainWindow.close)
         self.showDataBase.clicked.connect(self.showDataBaseClick)
         
-       
-        
+        self.chooseUser.currentTextChanged.connect(self.onUserChosen)
         
     def createImageView(self, mainWindow):
         self.image = QImage(300, 1000, QImage.Format_RGB32)
@@ -82,7 +81,7 @@ class Application(Ui_Application):
     
 
     def pickDirectoryClick(self):
-        aviFile = QFileDialog.getOpenFileName(self.mainWindow, 'Otwórz plik', 'c:\\',"Avi files (*.avi)")
+        aviFile = QFileDialog.getOpenFileName(self.mainWindow, 'Otwórz plik', '',"Avi files (*.avi)")
         self.mediaPlayer.stop()
         self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(aviFile[0])))
         self.mediaPlayer.play()
@@ -112,19 +111,23 @@ class Application(Ui_Application):
         
         
     def showDataBaseClick(self):
-        dbFile = QFileDialog.getOpenFileName(self.mainWindow, 'Otwórz bazę danych', 'c:\\',"Database files (*.db)")
-        print(dbFile)
+        self.dbFile = QFileDialog.getOpenFileName(self.mainWindow, 'Otwórz bazę danych', '',"Database files (*.db)")[0]
         
-        # connection = sqlite3.connect(dbFile[0])
-        with sqlite3.connect(dbFile[0]) as connection:
+        with sqlite3.connect(self.dbFile) as connection:
             connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
         
-            for row in cursor.execute("SELECT * FROM Ankieta"):
-                row = dict(zip(row.keys(), row))
-                print(row)
-                
+            idList = [str(row["Id"]) for row in cursor.execute("SELECT Id FROM Ankieta")]
+            self.chooseUser.addItems(idList)
 
+    def onUserChosen(self, userId):
+        with sqlite3.connect(self.dbFile) as connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+        
+            userData = cursor.execute("SELECT * FROM Ankieta WHERE Id=?", [userId]).fetchall()[0]
+            self.userData.setText(f"Id: {userData['Id']}\nPłeć: {userData['Plec']}")
+        
 
 
 if __name__ == "__main__":
