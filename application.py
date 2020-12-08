@@ -2,7 +2,13 @@ import sys
 import sqlite3
 from interface import Ui_Application
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QRubberBand, QFileDialog
+from PyQt5.QtWidgets import (
+    QGraphicsView,
+    QGraphicsScene,
+    QRubberBand,
+    QFileDialog,
+    QStyle,
+)
 from PyQt5.QtGui import QImage, QPixmap, QMouseEvent, QColor
 from PyQt5.QtCore import Qt, QRect, QSize, QUrl, QSizeF
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
@@ -41,24 +47,24 @@ class Application(Ui_Application):
         self.mainWindow = mainWindow
         self.createImageView(mainWindow)
 
+        # self.userData.setStyleSheet("background-color: lightgray")
         self.pickDirectory.clicked.connect(self.pickDirectoryClick)
-        self.exitButton.clicked.connect(mainWindow.close)
+        self.exitApplication.clicked.connect(mainWindow.close)
         self.showDataBase.clicked.connect(self.showDataBaseClick)
-
-        self.chooseUser.currentTextChanged.connect(self.onUserChosen)
-        self.userData.setTextColor(QColor(0, 0, 0))
+        self.chooseUser.currentTextChanged.connect(self.displayData)
+        self.playButton.clicked.connect(self.play_video)
+        self.mediaDurationSlider.sliderMoved.connect(self.set_position)
 
     def createImageView(self, mainWindow):
         self.image = QImage(300, 1000, QImage.Format_RGB32)
         self.image.fill(Qt.black)
-
         self.pixmap = QPixmap.fromImage(self.image)
 
         self.scene = QGraphicsScene()
         # self.scene.addPixmap(self.pixmap)
 
         self.graphicsView = ImageView(mainWindow)
-        self.graphicsView.setGeometry(QtCore.QRect(20, 20, 681, 401))
+        self.graphicsView.setGeometry(QtCore.QRect(20, 20, 731, 501))
         self.graphicsView.setObjectName("graphicsView")
         self.graphicsView.setScene(self.scene)
 
@@ -75,14 +81,42 @@ class Application(Ui_Application):
 
         # self.scene.setSceneRect(*self.graphicsView.geometry().getRect())
         self.clearScene.clicked.connect(self.clearRubberBandClick)
+        self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
+        self.mediaPlayer.positionChanged.connect(self.position_changed)
+        self.mediaPlayer.durationChanged.connect(self.duration_changed)
 
     def pickDirectoryClick(self):
         aviFile = QFileDialog.getOpenFileName(
             self.mainWindow, "Otwórz plik", "", "Avi files (*.avi)"
-        )
-        self.mediaPlayer.stop()
-        self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(aviFile[0])))
-        self.mediaPlayer.play()
+        )[0]
+
+        self.userId = aviFile[-6:-4]
+        if aviFile != "":
+            self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(aviFile)))
+            self.playButton.setEnabled(True)
+
+    def play_video(self):
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.mediaPlayer.pause()
+
+        else:
+            self.mediaPlayer.play()
+
+    def mediastate_changed(self, state):
+        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+            self.playButton.setText("Pause")
+
+        else:
+            self.playButton.setText("Play")
+
+    def position_changed(self, position):
+        self.mediaDurationSlider.setValue(position)
+
+    def duration_changed(self, duration):
+        self.mediaDurationSlider.setRange(0, duration)
+
+    def set_position(self, position):
+        self.mediaPlayer.setPosition(position)
 
     def clearRubberBandClick(self):
         self.graphicsView.rubberBand.hide()
@@ -99,36 +133,37 @@ class Application(Ui_Application):
             idList = [
                 str(row["Id"]) for row in cursor.execute("SELECT Id FROM Ankieta")
             ]
-            self.chooseUser.addItems(idList)
+            self.displayData()
 
-    def onUserChosen(self, userId):
+    def displayData(self):
+
         with sqlite3.connect(self.dbFile) as connection:
             connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
 
             userData = cursor.execute(
-                "SELECT * FROM Ankieta WHERE Id=?", [userId]
+                "SELECT * FROM Ankieta WHERE Id=?", [self.userId]
             ).fetchall()[0]
             self.userData.setText(
                 f"Id: {userData['Id']}\n\
-                Płeć: {userData['Plec']}\n\
-                Wiek: {userData['Wiek']}\n\
-                Województwo zamieszkania: {userData['Wojewodztwo']}\n\
-                Jak często marzną dłonie/stopy: {userData['Marzniecie']}\n\
-                Jak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}\n\
-                Jak często bierze zimne kąpiele: {userData['ZimneKapiele']}\n\
-                Jak często morsuje: {userData['Morsowanie']}\n\
-                Choroby: {userData['Choroby']}\n\
-                Przyjmowane leki: {userData['Leki']}\n\
-                Temperatura badanego: {userData['TempBadanego']}\n\
-                Tetno początkowe badanego: {userData['TetnoPoczatkowe']}\n\
-                Ciśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']}\n\
-                Temperatura wody przed 1 badaniem: {userData['TempWodyDo1Badania']}\n\
-                Tętno po 1 badaniu: {userData['TetnoPo1Badaniu']}\n\
-                Ciśnienie po 1 badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']}\n\
-                Temperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']}\n\
-                Tętno po drugim badaniu: {userData['TetnoPo2Badaniu']}\n\
-                Ciśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']}"
+Płeć: {userData['Plec']}\n\
+Wiek: {userData['Wiek']}\n\
+Województwo zamieszkania: {userData['Wojewodztwo']}\n\
+Jak często marzną dłonie/stopy: {userData['Marzniecie']}\n\
+Jak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}\n\
+Jak często bierze zimne kąpiele: {userData['ZimneKapiele']}\n\
+Jak często morsuje: {userData['Morsowanie']}\n\
+Choroby: {userData['Choroby']}\n\
+Przyjmowane leki: {userData['Leki']}\n\
+Temperatura badanego: {userData['TempBadanego']} °C\n\
+Tetno początkowe badanego: {userData['TetnoPoczatkowe']}/min\n\
+Ciśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']} mmHg\n\
+Temperatura wody przed pierwszym badaniem: {userData['TempWodyDo1Badania']} °C\n\
+Tętno po pierwszym badaniu: {userData['TetnoPo1Badaniu']}/min\n\
+Ciśnienie po pierwszym badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']} mmHg\n\
+Temperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']} °C\n\
+Tętno po drugim badaniu: {userData['TetnoPo2Badaniu']}/min\n\
+Ciśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']} mmHg"
             )
 
 
