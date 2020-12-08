@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Raport do pracy inżynierskiej</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='raport.js') }}"></script>
+    <link type="text/css" href="{{url_for('static', filename='ankieta.css') }}" rel="stylesheet" />
+</head>
+
+<body>
+    <form action="/raport/wyslij" method="post">
+        <p><b>Podaj nadany numer identyfikacyjny badanego</b></p>
+        <input type="number" name="id"><br><br>
+
+        <p><b>Podaj temperaturę badanego</b></p>
+        <input type="number" step=0.1 name="tempBadanego"><br><br>
+
+        <p><b>Podaj tętno poczatkowe badanego</b></p>
+        <input type="number" name="tetnoPoczatkowe"><br><br>
+
+        <p><b>Podaj ciśnienie skurczowe początkowe badanego</b></p>
+        <input type="number" name="cisSkurczPoczatkowe"><br><br>
+
+        <p><b>Podaj ciśnienie rozkurczowe początkowe badanego</b></p>
+        <input type="number" name="cisRozkurczPoczatkowe"><br><br>
+
+        <p><b>Podaj temperaturę wody</b></p>
+        <input type="number" step=0.1 name="tempWodyDo1Badania"><br><br>
+
+        <p><b>Podaj tętno końcowe badanego</b></p>
+        <input type="number" name="tetnoPo1Badaniu"><br><br>
+
+        <p><b>Podaj cisnienie skurczowe początkowe badanego</b></p>
+        <input type="number" name="cisSkurczPo1Badaniu"><br><br>
+
+        <p><b>Podaj cisnienie rozkurczowe początkowe badanego</b></p>
+        <input type="number" name="cisRozkurczPo1Badaniu"><br><br>
+
+        <p><b>Podaj temperaturę wody</b></p>
+        <input type="number" step=0.1 name="tempWodyDo2Badania"><br><br>
+
+        <p><b>Podaj tętno końcowe badanego</b></p>
+        <input type="number" name="tetnoPo2Badaniu"><br><br>
+
+        <p><b>Podaj cisnienie skurczowe początkowe badanego</b></p>
+        <input type="number" name="cisSkurczPo2Badaniu"><br><br>
+
+        <p><b>Podaj cisnienie rozkurczowe początkowe badanego</b></p>
+        <input type="number" name="cisRozkurczPo2Badaniu"><br><br>
+
+        <br>
+        <input type="submit" value="Prześlij odpowiedzi">
+    </form>
+</body>
+
+</html>

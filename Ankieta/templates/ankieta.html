@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ankieta do pracy inżynierskiej</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='ankieta.js') }}"></script>
+    <link type="text/css" href="{{url_for('static', filename='ankieta.css') }}" rel="stylesheet" />
+</head>
+<body>
+    <h3>
+        <b>
+            Jestem studentką Inżynierii Biomedycznej na Politechnice Gdańskiej.
+            Jest to anonimowa ankieta skierowana do uczestników badania syndromu 
+			Raynauda do pracy inżynierskiej pt. "Oprogramowanie wspomagające diagnozę 
+			objawu Raynauda na podstawie próby prowokacyjnej"<br>
+            Dziękuję za poświęcony czas!
+        </b>
+    </h3><br>
+
+    <form action="/wyslij" method="post" onsubmit="sprawdzAnkiete()">
+        <p><b>Podaj nadany ci numer identyfikacyjny</b></p>
+        <input type="number" name="id"><br><br>
+        
+        <p><b>1. Czy masz aktualnie objawy typowe dla Covid19?</b><br>
+        (gorączka powyżej 38˚C, kaszel, duszności, zaburzenia węchu i smaku)</p>
+        <input type="radio" name="objawy" value="tak">Tak<br>
+        <input type="radio" name="objawy" value="nie">Nie<br>
+        
+        <p><b>2. Czy w ciągu ostatnich 14 dni miałeś kontakt z osobą, u której potwierdzono Covid19?</b></p>
+        <input type="radio" name="kontaktCovid" value="tak">Tak<br>
+        <input type="radio" name="kontaktCovid" value="nie">Nie<br>
+        
+        <p><b>3. Czy w ciągu ostatnich 14 dni przebywałeś za granicą?</b></p>
+        <input type="radio" name="zagranica" value="tak">Tak<br>
+        <input type="radio" name="zagranica" value="nie">Nie<br>
+    
+        <p><b>4.Podaj numer telefonu.</b></p>
+        <input type="number" name="telefon" placeholder="Np. 123456789"><br>
+    
+        <p><b>5. Podaj swoją płeć.</b></p>
+        <input type="radio" name="plec" value="kobieta">Kobieta<br>
+        <input type="radio" name="plec" value="mezczyzna">Mężczyzna<br>
+
+        <p><b>6. Podaj swój wiek.</b></p>
+        <input type="number" name="wiek" placeholder="Wiek"><br>
+
+        <p><b>7. Wybierz województwo zamieszkania.</b></p>
+		<input type="radio" name="wojewodztwo" value="dolnoslaskie">dolnośląskie<br>
+        <input type="radio" name="wojewodztwo" value="kujawsko-pomorskie">kujawsko-pomorskie<br>
+        <input type="radio" name="wojewodztwo" value="lubelskie">lubelskie<br>
+        <input type="radio" name="wojewodztwo" value="lubuskie">lubuskie<br>
+        <input type="radio" name="wojewodztwo" value="lodzkie">łódzkie<br>
+        <input type="radio" name="wojewodztwo" value="malopolskie">małopolskie<br>
+        <input type="radio" name="wojewodztwo" value="mazowieckie">mazowieckie<br>
+        <input type="radio" name="wojewodztwo" value="opolskie">opolskie<br>
+        <input type="radio" name="wojewodztwo" value="podkarpackie">podkarpackie<br>
+        <input type="radio" name="wojewodztwo" value="pomorskie">pomorskie<br>
+        <input type="radio" name="wojewodztwo" value="slaskie">śląskie<br>
+        <input type="radio" name="wojewodztwo" value="swietokrzyskie">świętokrzyskie<br>
+        <input type="radio" name="wojewodztwo" value="warminsko-mazurskie">warmińsko-mazurskie<br>
+        <input type="radio" name="wojewodztwo" value="wielkopolskie">wielkopolskie<br>
+        <input type="radio" name="wojewodztwo" value="zachodzniopomorskie">zachodzniopomorskie<br>
+
+        <p><b>8. Wielkość miejsca zamieszkania.</b></p>
+        <input type="radio" name="wielkoscMiejscaZamieszkania" value="wies">Wieś<br>
+        <input type="radio" name="wielkoscMiejscaZamieszkania" value="miasto<20tys">Miasto poniżej 20 tys. mieszkańców<br>
+        <input type="radio" name="wielkoscMiejscaZamieszkania" value="miasto<100tys">Miasto od 20 tys. do 100 tys. mieszkańców<br>
+        <input type="radio" name="wielkoscMiejscaZamieszkania" value="miasto<500tys">Miasto od 100 tys. do 500 tys. mieszkańców<br>
+        <input type="radio" name="wielkoscMiejscaZamieszkania" value="miasto>500tys">Miasto powyżej 500 tys. mieszkańców<br>
+
+        <p><b>9. Podaj jak często marzną ci dłonie lub stopy.</b></p>
+        <input type="radio" name="marzniecie" value="rzadko">Rzadko lub nigdy<br>
+        <input type="radio" name="marzniecie" value="czasami">Czasami<br>
+        <input type="radio" name="marzniecie" value="czesto">Często<br>
+        <input type="radio" name="marzniecie" value="zawsze">Prawie zawsze<br>
+		
+        <p><b>10. Podaj jak często sinieją/bieleją ci dłonie lub stopy.</b></p>
+        <input type="radio" name="sinienie" value="rzadko">Rzadko lub nigdy<br>
+        <input type="radio" name="sinienie" value="czasami">Czasami<br>
+        <input type="radio" name="sinienie" value="czesto">Często<br>
+        <input type="radio" name="sinienie" value="zawsze">Prawie zawsze<br>
+		
+        <p><b>11. Podaj jak często bierzesz zimne prysznice lub kąpiele.</b></p>
+        <input type="radio" name="zimneKapiele" value="rzadko">Rzadko lub nigdy<br>
+        <input type="radio" name="zimneKapiele" value="czasami">Czasami<br>
+        <input type="radio" name="zimneKapiele" value="czesto">Często<br>
+        <input type="radio" name="zimneKapiele" value="zawsze">Prawie zawsze<br>
+		
+        <p><b>12. Podaj jak często morsujesz(kąpiesz się w morzu/jeziorze/rzece poza sezonem letnim).</b></p>
+        <input type="radio" name="morsowanie" value="rzadko">Rzadko lub nigdy<br>
+        <input type="radio" name="morsowanie" value="czasami">Czasami<br>
+        <input type="radio" name="morsowanie" value="czesto">Często<br>
+        <input type="radio" name="morsowanie" value="zawsze">Prawie zawsze<br>
+        
+        <p><b>13. Czy kiedykolwiek specjalista zalecił ci unikanie ekspozycji na zimno?</b></p>
+        <input type="radio" name="unikanieZimna" value="tak">Tak<br>
+        <input type="radio" name="unikanieZimna" value="nie">Nie<br>
+        
+        <p><b>14. Czy chorujesz na jakieś choroby przewlekłe? Jeśli tak, podaj jakie.</b></p>
+        <textarea name="choroby" cols=40 rows=3 placeholder="Choroby"></textarea><br>
+        
+        <p><b>15. Czy przyjmujesz jakieś lekarstwa na stałe? Jeśli tak, podaj jakie.</b></p>
+        <textarea name="leki" cols=40 rows=3 placeholder="Leki"></textarea><br>
+        
+        <p><b>16. Uwagi:</b></p>
+        <textarea name="uwagi" cols=40 rows=3 placeholder="Uwagi"></textarea><br>
+
+        <br>
+        <input type="submit" value="Prześlij odpowiedzi">
+    </form>
+</body>
+</html>

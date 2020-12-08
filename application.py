@@ -62,7 +62,6 @@ class Application(Ui_Application):
         self.graphicsView.setObjectName("graphicsView")
         self.graphicsView.setScene(self.scene)
 
-        ###
         self.mediaPlayer = QMediaPlayer(mainWindow)
         self.videoItem = QGraphicsVideoItem()
         self.videoSize = self.graphicsView.size()
@@ -73,8 +72,6 @@ class Application(Ui_Application):
         self.mediaPlayer.setVideoOutput(self.videoItem)
         self.graphicsView.scene().addItem(self.videoItem)
         self.graphicsView.show()
-
-        ###
 
         # self.scene.setSceneRect(*self.graphicsView.geometry().getRect())
         self.clearScene.clicked.connect(self.clearRubberBandClick)
@@ -89,20 +86,6 @@ class Application(Ui_Application):
 
     def clearRubberBandClick(self):
         self.graphicsView.rubberBand.hide()
-
-        # if (video.isOpened()== False):
-        #     print("Error opening video stream or file")
-        # while(video.isOpened()):
-        #     ret, frame = video.read()
-        #     if ret == True:
-        #         cv2.imshow('Frame',frame).
-        #         if cv2.waitKey(25) & 0xFF == ord('q'):
-        #             break
-        #     else:
-        #         break
-
-        # video.release()
-        # cv2.destroyAllWindows()
 
     def showDataBaseClick(self):
         self.dbFile = QFileDialog.getOpenFileName(
@@ -127,7 +110,25 @@ class Application(Ui_Application):
                 "SELECT * FROM Ankieta WHERE Id=?", [userId]
             ).fetchall()[0]
             self.userData.setText(
-                f"Id: {userData['Id']}\nPłeć: {userData['Plec']}\nWiek: {userData['Wiek']}\nWojewództwo zamieszkania: {userData['Wojewodztwo']}\nJak często marzną dłonie/stopy: {userData['Marzniecie']}\nJak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}\nJak często bierze zimne kąpiele: {userData['ZimneKapiele']}\nJak często morsuje: {userData['Morsowanie']}\nChoroby: {userData['Choroby']}\nPrzyjmowane leki: {userData['Leki']}\nTemperatura badanego: {userData['TempBadanego']}\nTetno początkowe badanego: {userData['TetnoPoczatkowe']}\nCiśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']}\nTemperatura wody przed 1 badaniem: {userData['TempWodyDo1Badania']}\nTętno po 1 badaniu: {userData['TetnoPo1Badaniu']}\nCiśnienie po 1 badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']}\nTemperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']}\nTętno po drugim badaniu: {userData['TetnoPo2Badaniu']}\nCiśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']}"
+                f"Id: {userData['Id']}\n\
+                Płeć: {userData['Plec']}\n\
+                Wiek: {userData['Wiek']}\n\
+                Województwo zamieszkania: {userData['Wojewodztwo']}\n\
+                Jak często marzną dłonie/stopy: {userData['Marzniecie']}\n\
+                Jak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}\n\
+                Jak często bierze zimne kąpiele: {userData['ZimneKapiele']}\n\
+                Jak często morsuje: {userData['Morsowanie']}\n\
+                Choroby: {userData['Choroby']}\n\
+                Przyjmowane leki: {userData['Leki']}\n\
+                Temperatura badanego: {userData['TempBadanego']}\n\
+                Tetno początkowe badanego: {userData['TetnoPoczatkowe']}\n\
+                Ciśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']}\n\
+                Temperatura wody przed 1 badaniem: {userData['TempWodyDo1Badania']}\n\
+                Tętno po 1 badaniu: {userData['TetnoPo1Badaniu']}\n\
+                Ciśnienie po 1 badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']}\n\
+                Temperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']}\n\
+                Tętno po drugim badaniu: {userData['TetnoPo2Badaniu']}\n\
+                Ciśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']}"
             )
 
 
