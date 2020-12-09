@@ -56,16 +56,10 @@ class Application(Ui_Application):
         self.mediaDurationSlider.sliderMoved.connect(self.set_position)
 
     def createImageView(self, mainWindow):
-        self.image = QImage(300, 1000, QImage.Format_RGB32)
-        self.image.fill(Qt.black)
-        self.pixmap = QPixmap.fromImage(self.image)
-
-        self.scene = QGraphicsScene()
-        # self.scene.addPixmap(self.pixmap)
-
         self.graphicsView = ImageView(mainWindow)
-        self.graphicsView.setGeometry(QtCore.QRect(20, 20, 731, 501))
+        self.videoLayout.addWidget(self.graphicsView)
         self.graphicsView.setObjectName("graphicsView")
+        self.scene = QGraphicsScene()
         self.graphicsView.setScene(self.scene)
 
         self.mediaPlayer = QMediaPlayer(mainWindow)
