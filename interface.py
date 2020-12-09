@@ -15,7 +15,7 @@ class Ui_Application(object):
     def setupUi(self, Application):
         Application.setObjectName("Application")
         Application.setEnabled(True)
-        Application.resize(1287, 833)
+        Application.resize(1070, 802)
         font = QtGui.QFont()
         font.setPointSize(10)
         Application.setFont(font)
@@ -104,7 +104,9 @@ class Ui_Application(object):
         self.rightVertLayout.addItem(spacerItem2)
         self.userData = QtWidgets.QTextEdit(Application)
         self.userData.setEnabled(True)
+        self.userData.setMinimumSize(QtCore.QSize(350, 0))
         self.userData.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+        self.userData.setReadOnly(True)
         self.userData.setObjectName("userData")
         self.rightVertLayout.addWidget(self.userData)
         spacerItem3 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
@@ -117,7 +119,6 @@ class Ui_Application(object):
         self.rightVertLayout.addWidget(self.exitApplication)
         self.mainLayout.addLayout(self.rightVertLayout)
         self.mainLayout.setStretch(0, 2)
-        self.mainLayout.setStretch(1, 1)
 
         self.retranslateUi(Application)
         QtCore.QMetaObject.connectSlotsByName(Application)

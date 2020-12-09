@@ -1,23 +1,18 @@
 import sys
 import sqlite3
+
+from PyQt5.QtMultimediaWidgets import QVideoWidget
 from interface import Ui_Application
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import (
-    QGraphicsView,
-    QGraphicsScene,
-    QRubberBand,
-    QFileDialog,
-    QStyle,
-)
-from PyQt5.QtGui import QImage, QPixmap, QMouseEvent, QColor
-from PyQt5.QtCore import Qt, QRect, QSize, QUrl, QSizeF
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QRubberBand, QFileDialog, QWidget
+from PyQt5.QtGui import QMouseEvent
+from PyQt5.QtCore import QRect, QSize, QUrl
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
-from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
 
 
-class ImageView(QGraphicsView):
-    def __init__(self, mainWindow):
-        super().__init__(mainWindow)
+class RubberBandWidget(QWidget):
+    def __init__(self):
+        super().__init__()
         self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
 
     def mousePressEvent(self, event: QMouseEvent):
@@ -32,8 +27,6 @@ class ImageView(QGraphicsView):
         super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event: QMouseEvent):
-        # self.rubberBand.hide()
-        # self.scene().addRect(self.startPos.x(), self.startPos.y(), event.pos().x()-self.startPos.x(), event.pos().y()-self.startPos.y())
         super().mouseReleaseEvent(event)
         print(event.pos())
 
@@ -45,9 +38,8 @@ class Application(Ui_Application):
     def setupUi(self, mainWindow):
         super().setupUi(mainWindow)
         self.mainWindow = mainWindow
-        self.createImageView(mainWindow)
+        self.createVideoView(mainWindow)
 
-        # self.userData.setStyleSheet("background-color: lightgray")
         self.pickDirectory.clicked.connect(self.pickDirectoryClick)
         self.exitApplication.clicked.connect(mainWindow.close)
         self.showDataBase.clicked.connect(self.showDataBaseClick)
@@ -55,25 +47,17 @@ class Application(Ui_Application):
         self.playButton.clicked.connect(self.play_video)
         self.mediaDurationSlider.sliderMoved.connect(self.set_position)
 
-    def createImageView(self, mainWindow):
-        self.graphicsView = ImageView(mainWindow)
-        self.videoLayout.addWidget(self.graphicsView)
-        self.graphicsView.setObjectName("graphicsView")
-        self.scene = QGraphicsScene()
-        self.graphicsView.setScene(self.scene)
+    def createVideoView(self, mainWindow):
+        self.rubberBandWidget = RubberBandWidget()
+        self.videoLayout.addWidget(self.rubberBandWidget)
+        lay = QtWidgets.QVBoxLayout(self.rubberBandWidget)
+        lay.setContentsMargins(0, 0, 0, 0)
+        self.videoWidget = QVideoWidget()
+        lay.addWidget(self.videoWidget)
 
         self.mediaPlayer = QMediaPlayer(mainWindow)
-        self.videoItem = QGraphicsVideoItem()
-        self.videoSize = self.graphicsView.size()
-        print(self.videoSize)
-        self.vidSizeF = QSizeF(self.videoSize)
-        self.videoItem.setSize(self.vidSizeF)
+        self.mediaPlayer.setVideoOutput(self.videoWidget)
 
-        self.mediaPlayer.setVideoOutput(self.videoItem)
-        self.graphicsView.scene().addItem(self.videoItem)
-        self.graphicsView.show()
-
-        # self.scene.setSceneRect(*self.graphicsView.geometry().getRect())
         self.clearScene.clicked.connect(self.clearRubberBandClick)
         self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
         self.mediaPlayer.positionChanged.connect(self.position_changed)
@@ -113,7 +97,7 @@ class Application(Ui_Application):
         self.mediaPlayer.setPosition(position)
 
     def clearRubberBandClick(self):
-        self.graphicsView.rubberBand.hide()
+        self.rubberBandWidget.rubberBand.hide()
 
     def showDataBaseClick(self):
         self.dbFile = QFileDialog.getOpenFileName(
