@@ -2,7 +2,7 @@ import sys
 import sqlite3
 
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from interface import Ui_Application
+from interface import Ui_mainWindow
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QRubberBand, QFileDialog, QWidget
 from PyQt5.QtGui import QMouseEvent
@@ -31,7 +31,7 @@ class RubberBandWidget(QWidget):
         print(event.pos())
 
 
-class Application(Ui_Application):
+class Application(Ui_mainWindow):
     def __init__(self):
         super().__init__()
 
@@ -43,7 +43,7 @@ class Application(Ui_Application):
         self.pickDirectory.clicked.connect(self.pickDirectoryClick)
         self.exitApplication.clicked.connect(mainWindow.close)
         self.showDataBase.clicked.connect(self.showDataBaseClick)
-        self.chooseUser.currentTextChanged.connect(self.displayData)
+        # self.chooseUser.currentTextChanged.connect(self.displayData)
         self.playButton.clicked.connect(self.play_video)
         self.mediaDurationSlider.sliderMoved.connect(self.set_position)
 

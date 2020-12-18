@@ -89,7 +89,7 @@ def raportWyslij():
     )
     connection.commit()
 
-    return render_template("ankietaKoniec.html")
+    return render_template("raportKoniec.html")
 
 
 if __name__ == "__main__":
