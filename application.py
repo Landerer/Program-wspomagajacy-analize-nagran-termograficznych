@@ -25,7 +25,7 @@ class RubberBandWidget(QWidget):
         print(self.startPos)
 
     def mouseMoveEvent(self, event: QMouseEvent):
-        self.rubberBand.setGeometry(QRect(self.startPos, event.pos()))
+        self.rubberBand.setGeometry(QRect(self.startPos, event.pos()).normalized())
         super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event: QMouseEvent):
