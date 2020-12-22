@@ -1,13 +1,15 @@
 import sys
+from textwrap import dedent
 import sqlite3
 
-from PyQt5.QtMultimediaWidgets import QVideoWidget
-from interface import Ui_mainWindow
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QRubberBand, QFileDialog, QWidget
 from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtCore import QRect, QSize, QUrl
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtMultimediaWidgets import QVideoWidget
+
+from interface import Ui_mainWindow
 
 
 class RubberBandWidget(QWidget):
@@ -123,25 +125,29 @@ class Application(Ui_mainWindow):
                 "SELECT * FROM Ankieta WHERE Id=?", [self.userId]
             ).fetchall()[0]
             self.userData.setText(
-                f"Id: {userData['Id']}\n\
-Płeć: {userData['Plec']}\n\
-Wiek: {userData['Wiek']}\n\
-Województwo zamieszkania: {userData['Wojewodztwo']}\n\
-Jak często marzną dłonie/stopy: {userData['Marzniecie']}\n\
-Jak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}\n\
-Jak często bierze zimne kąpiele: {userData['ZimneKapiele']}\n\
-Jak często morsuje: {userData['Morsowanie']}\n\
-Choroby: {userData['Choroby']}\n\
-Przyjmowane leki: {userData['Leki']}\n\
-Temperatura badanego: {userData['TempBadanego']} °C\n\
-Tetno początkowe badanego: {userData['TetnoPoczatkowe']}/min\n\
-Ciśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']} mmHg\n\
-Temperatura wody przed pierwszym badaniem: {userData['TempWodyDo1Badania']} °C\n\
-Tętno po pierwszym badaniu: {userData['TetnoPo1Badaniu']}/min\n\
-Ciśnienie po pierwszym badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']} mmHg\n\
-Temperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']} °C\n\
-Tętno po drugim badaniu: {userData['TetnoPo2Badaniu']}/min\n\
-Ciśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']} mmHg"
+                dedent(
+                    f"""\
+                    Id: {userData['Id']}
+                    Płeć: {userData['Plec']}
+                    Wiek: {userData['Wiek']}
+                    Województwo zamieszkania: {userData['Wojewodztwo']}
+                    Jak często marzną dłonie/stopy: {userData['Marzniecie']}
+                    Jak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}
+                    Jak często bierze zimne kąpiele: {userData['ZimneKapiele']}
+                    Jak często morsuje: {userData['Morsowanie']}
+                    Choroby: {userData['Choroby']}
+                    Przyjmowane leki: {userData['Leki']}
+                    Temperatura badanego: {userData['TempBadanego']} °C
+                    Tetno początkowe badanego: {userData['TetnoPoczatkowe']}/min
+                    Ciśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']} mmHg
+                    Temperatura wody przed pierwszym badaniem: {userData['TempWodyDo1Badania']} °C
+                    Tętno po pierwszym badaniu: {userData['TetnoPo1Badaniu']}/min
+                    Ciśnienie po pierwszym badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']} mmHg
+                    Temperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']} °C
+                    Tętno po drugim badaniu: {userData['TetnoPo2Badaniu']}/min
+                    Ciśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']} mmHg
+                    """
+                )
             )
 
 
