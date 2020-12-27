@@ -1,5 +1,7 @@
+import logging
 import sys
 from textwrap import dedent
+
 import sqlite3
 
 from PyQt5 import QtWidgets
@@ -22,7 +24,7 @@ class RubberBandWidget(QWidget):
         self.rubberBand.setGeometry(QRect(self.startPos, QSize()))
         self.rubberBand.show()
         super().mousePressEvent(event)
-        print(self.startPos)
+        logging.debug(self.startPos)
 
     def mouseMoveEvent(self, event: QMouseEvent):
         self.rubberBand.setGeometry(QRect(self.startPos, event.pos()).normalized())
@@ -30,7 +32,7 @@ class RubberBandWidget(QWidget):
 
     def mouseReleaseEvent(self, event: QMouseEvent):
         super().mouseReleaseEvent(event)
-        print(event.pos())
+        logging.debug(event.pos())
 
 
 class Application(Ui_mainWindow):
@@ -93,6 +95,7 @@ class Application(Ui_mainWindow):
         self.mediaDurationSlider.setValue(position)
 
     def duration_changed(self, duration):
+        logging.debug(duration)
         self.mediaDurationSlider.setRange(0, duration)
 
     def set_position(self, position):
@@ -152,6 +155,11 @@ class Application(Ui_mainWindow):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="[%(asctime)s] %(levelname)s [%(filename)s:%(lineno)d %(name)s.%(funcName)s] %(message)s",
+    )
+
     app = QtWidgets.QApplication(sys.argv)
     mainWindow = QtWidgets.QDialog()
     ui = Application()
