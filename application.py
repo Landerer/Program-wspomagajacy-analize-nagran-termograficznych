@@ -44,10 +44,9 @@ class Application(Ui_mainWindow):
         self.mainWindow = mainWindow
         self.createVideoView(mainWindow)
 
-        self.pickDirectory.clicked.connect(self.pickDirectoryClick)
+        self.pickDirectory.clicked.connect(self.pickVideoClick)
         self.exitApplication.clicked.connect(mainWindow.close)
-        self.showDataBase.clicked.connect(self.showDataBaseClick)
-        # self.chooseUser.currentTextChanged.connect(self.displayData)
+        self.showDataBase.clicked.connect(self.pickDataBaseClick)
         self.playButton.clicked.connect(self.play_video)
         self.mediaDurationSlider.sliderMoved.connect(self.set_position)
 
@@ -67,7 +66,7 @@ class Application(Ui_mainWindow):
         self.mediaPlayer.positionChanged.connect(self.position_changed)
         self.mediaPlayer.durationChanged.connect(self.duration_changed)
 
-    def pickDirectoryClick(self):
+    def pickVideoClick(self):
         aviFile = QFileDialog.getOpenFileName(
             self.mainWindow, "Otwórz plik", "", "Avi files (*.avi)"
         )[0]
@@ -104,7 +103,7 @@ class Application(Ui_mainWindow):
     def clearRubberBandClick(self):
         self.rubberBandWidget.rubberBand.hide()
 
-    def showDataBaseClick(self):
+    def pickDataBaseClick(self):
         self.dbFile = QFileDialog.getOpenFileName(
             self.mainWindow, "Otwórz bazę danych", "", "Database files (*.db)"
         )[0]
