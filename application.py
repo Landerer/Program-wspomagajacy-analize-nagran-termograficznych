@@ -1,9 +1,11 @@
+import math
 import logging
 import sys
 from textwrap import dedent
 
 import sqlite3
 
+import pyqtgraph as pg
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QRubberBand, QFileDialog, QWidget
 from PyQt5.QtGui import QMouseEvent
@@ -43,6 +45,7 @@ class Application(Ui_mainWindow):
         super().setupUi(mainWindow)
         self.mainWindow = mainWindow
         self.createVideoView(mainWindow)
+        self.createGraphWidget()
 
         self.pickDirectory.clicked.connect(self.pickVideoClick)
         self.exitApplication.clicked.connect(mainWindow.close)
@@ -65,6 +68,11 @@ class Application(Ui_mainWindow):
         self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
         self.mediaPlayer.positionChanged.connect(self.position_changed)
         self.mediaPlayer.durationChanged.connect(self.duration_changed)
+
+    def createGraphWidget(self):
+        plotWidget = pg.PlotWidget()
+        self.graphLayout.addWidget(plotWidget)
+        self.plot = plotWidget.getPlotItem().plot([], [])
 
     def pickVideoClick(self):
         aviFile = QFileDialog.getOpenFileName(
@@ -96,12 +104,18 @@ class Application(Ui_mainWindow):
     def duration_changed(self, duration):
         logging.debug(duration)
         self.mediaDurationSlider.setRange(0, duration)
+        self.displayGraph(duration)
 
     def set_position(self, position):
         self.mediaPlayer.setPosition(position)
 
     def clearRubberBandClick(self):
         self.rubberBandWidget.rubberBand.hide()
+
+    def displayGraph(self, videoDuration):
+        x = list(range(videoDuration))
+        y = [math.sin(x / 1000 * 2 * math.pi) for x in x]
+        self.plot.setData(x, y)
 
     def pickDataBaseClick(self):
         self.dbFile = QFileDialog.getOpenFileName(
