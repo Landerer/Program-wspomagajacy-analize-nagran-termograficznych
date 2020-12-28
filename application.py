@@ -7,7 +7,7 @@ import sqlite3
 
 import pyqtgraph as pg
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QFileDialog, QMainWindow
+from PyQt5.QtWidgets import QFileDialog, QMainWindow, QStyle
 
 from PyQt5.QtCore import QUrl
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
@@ -41,6 +41,7 @@ class Application(Ui_mainWindow):
         self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
         self.mediaPlayer.positionChanged.connect(self.position_changed)
         self.mediaPlayer.durationChanged.connect(self.duration_changed)
+        self.mediastate_changed(QMediaPlayer.StoppedState)
 
     def createGraphWidget(self):
         plotWidget = pg.PlotWidget()
@@ -60,16 +61,19 @@ class Application(Ui_mainWindow):
     def play_video(self):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
             self.mediaPlayer.pause()
-
         else:
             self.mediaPlayer.play()
 
     def mediastate_changed(self, state):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
-            self.playButton.setText("Pause")
-
+            buttonText = "Pause"
+            buttonIcon = QStyle.SP_MediaPause
         else:
-            self.playButton.setText("Play")
+            buttonText = "Play"
+            buttonIcon = QStyle.SP_MediaPlay
+
+        self.playButton.setText(buttonText)
+        self.playButton.setIcon(self.playButton.style().standardIcon(buttonIcon))
 
     def position_changed(self, position):
         self.mediaDurationSlider.setValue(position)
