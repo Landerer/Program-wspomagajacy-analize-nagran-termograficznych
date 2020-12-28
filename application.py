@@ -7,7 +7,7 @@ import sqlite3
 
 import pyqtgraph as pg
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMainWindow
 
 from PyQt5.QtCore import QUrl
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
@@ -16,25 +16,27 @@ from interface import Ui_mainWindow
 
 
 class Application(Ui_mainWindow):
-    def __init__(self):
+    def __init__(self, mainWindow: QMainWindow):
         super().__init__()
-
-    def setupUi(self, mainWindow):
-        super().setupUi(mainWindow)
         self.mainWindow = mainWindow
-        self.createMediaPlayer(mainWindow)
+        self.setupUi()
+        mainWindow.show()
+
+    def setupUi(self):
+        super().setupUi(self.mainWindow)
+        self.createMediaPlayer()
         self.createGraphWidget()
 
         self.pickDirectory.clicked.connect(self.pickVideoClick)
-        self.exitApplication.clicked.connect(mainWindow.close)
+        self.exitApplication.clicked.connect(self.mainWindow.close)
         self.showDataBase.clicked.connect(self.pickDataBaseClick)
         self.clearScene.clicked.connect(self.graphicsView.scene().clearSelection)
 
         self.playButton.clicked.connect(self.play_video)
         self.mediaDurationSlider.sliderMoved.connect(self.set_position)
 
-    def createMediaPlayer(self, mainWindow):
-        self.mediaPlayer = QMediaPlayer(mainWindow)
+    def createMediaPlayer(self):
+        self.mediaPlayer = QMediaPlayer(self.mainWindow)
         self.mediaPlayer.setVideoOutput(self.graphicsView.scene().videoItem)
         self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
         self.mediaPlayer.positionChanged.connect(self.position_changed)
@@ -143,7 +145,5 @@ if __name__ == "__main__":
 
     app = QtWidgets.QApplication(sys.argv)
     mainWindow = QtWidgets.QMainWindow()
-    ui = Application()
-    ui.setupUi(mainWindow)
-    mainWindow.show()
+    ui = Application(mainWindow)
     sys.exit(app.exec_())
