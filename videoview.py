@@ -35,6 +35,7 @@ class VideoScene(QGraphicsScene):
             self.videoItem.prepareGeometryChange()
             self.videoItem.setSize(size)
             self.setSceneRect(self.videoItem.boundingRect())
+            self.clearSelection()
 
     def clearSelection(self) -> None:
         self.rectangle.setRect(QRectF())
