@@ -12,7 +12,7 @@ from PyQt5.QtGui import (
     QPen,
     QResizeEvent,
 )
-from PyQt5.QtCore import QLineF, QRectF, QSizeF, Qt
+from PyQt5.QtCore import QLineF, QPointF, QRectF, QSizeF, Qt
 from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
 
 
@@ -43,13 +43,24 @@ class VideoScene(QGraphicsScene):
     def selection(self) -> Tuple[int, int, int, int]:
         return self.rectangle.rect().toRect().getCoords()
 
+    @staticmethod
+    def coerceInside(point: QPointF, rect: QRectF):
+        return QPointF(
+            min(max(point.x(), rect.left()), rect.right()),
+            min(max(point.y(), rect.top()), rect.bottom()),
+        )
+
+    def coerceInsideVideo(self, point: QPointF):
+        return self.coerceInside(point, self.videoItem.boundingRect())
+
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent) -> None:
-        self.startPos = event.scenePos()
+        self.startPos = self.coerceInsideVideo(event.scenePos())
         return super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         self.rectangle.prepareGeometryChange()
-        self.rectangle.setRect(QRectF(self.startPos, event.scenePos()).normalized())
+        endPos = self.coerceInsideVideo(event.scenePos())
+        self.rectangle.setRect(QRectF(self.startPos, endPos).normalized())
         return super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event: QGraphicsSceneMouseEvent) -> None:
