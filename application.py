@@ -38,6 +38,7 @@ class Application(Ui_mainWindow):
     def createMediaPlayer(self):
         self.mediaPlayer = QMediaPlayer(self.mainWindow)
         self.mediaPlayer.setVideoOutput(self.graphicsView.scene().videoItem)
+        self.mediaPlayer.setNotifyInterval(100)
         self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
         self.mediaPlayer.positionChanged.connect(self.position_changed)
         self.mediaPlayer.durationChanged.connect(self.duration_changed)
@@ -57,6 +58,7 @@ class Application(Ui_mainWindow):
         if aviFile != "":
             self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(aviFile)))
             self.playButton.setEnabled(True)
+            self.mediaDurationSlider.setEnabled(True)
 
     def play_video(self):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:

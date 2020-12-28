@@ -40,6 +40,7 @@ class Ui_mainWindow(object):
         self.playButton.setObjectName("playButton")
         self.videoControlsLayout.addWidget(self.playButton)
         self.mediaDurationSlider = QtWidgets.QSlider(self.centralwidget)
+        self.mediaDurationSlider.setEnabled(False)
         self.mediaDurationSlider.setOrientation(QtCore.Qt.Horizontal)
         self.mediaDurationSlider.setObjectName("mediaDurationSlider")
         self.videoControlsLayout.addWidget(self.mediaDurationSlider)

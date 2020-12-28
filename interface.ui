@@ -62,6 +62,9 @@
                                 </item>
                                 <item>
                                     <widget class="QSlider" name="mediaDurationSlider">
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
                                         <property name="orientation">
                                             <enum>Qt::Horizontal</enum>
                                         </property>
