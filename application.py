@@ -7,34 +7,12 @@ import sqlite3
 
 import pyqtgraph as pg
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QRubberBand, QFileDialog, QWidget
-from PyQt5.QtGui import QMouseEvent
-from PyQt5.QtCore import QRect, QSize, QUrl
+from PyQt5.QtWidgets import QFileDialog
+
+from PyQt5.QtCore import QUrl
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
-from PyQt5.QtMultimediaWidgets import QVideoWidget
 
 from interface import Ui_mainWindow
-
-
-class RubberBandWidget(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.rubberBand = QRubberBand(QRubberBand.Rectangle, self)
-
-    def mousePressEvent(self, event: QMouseEvent):
-        self.startPos = event.pos()
-        self.rubberBand.setGeometry(QRect(self.startPos, QSize()))
-        self.rubberBand.show()
-        super().mousePressEvent(event)
-        logging.debug(self.startPos)
-
-    def mouseMoveEvent(self, event: QMouseEvent):
-        self.rubberBand.setGeometry(QRect(self.startPos, event.pos()).normalized())
-        super().mouseMoveEvent(event)
-
-    def mouseReleaseEvent(self, event: QMouseEvent):
-        super().mouseReleaseEvent(event)
-        logging.debug(event.pos())
 
 
 class Application(Ui_mainWindow):
@@ -44,27 +22,20 @@ class Application(Ui_mainWindow):
     def setupUi(self, mainWindow):
         super().setupUi(mainWindow)
         self.mainWindow = mainWindow
-        self.createVideoView(mainWindow)
+        self.createMediaPlayer(mainWindow)
         self.createGraphWidget()
 
         self.pickDirectory.clicked.connect(self.pickVideoClick)
         self.exitApplication.clicked.connect(mainWindow.close)
         self.showDataBase.clicked.connect(self.pickDataBaseClick)
+        self.clearScene.clicked.connect(self.graphicsView.scene().clearSelection)
+
         self.playButton.clicked.connect(self.play_video)
         self.mediaDurationSlider.sliderMoved.connect(self.set_position)
 
-    def createVideoView(self, mainWindow):
-        self.rubberBandWidget = RubberBandWidget()
-        self.videoLayout.addWidget(self.rubberBandWidget)
-        lay = QtWidgets.QVBoxLayout(self.rubberBandWidget)
-        lay.setContentsMargins(0, 0, 0, 0)
-        self.videoWidget = QVideoWidget()
-        lay.addWidget(self.videoWidget)
-
+    def createMediaPlayer(self, mainWindow):
         self.mediaPlayer = QMediaPlayer(mainWindow)
-        self.mediaPlayer.setVideoOutput(self.videoWidget)
-
-        self.clearScene.clicked.connect(self.clearRubberBandClick)
+        self.mediaPlayer.setVideoOutput(self.graphicsView.scene().videoItem)
         self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
         self.mediaPlayer.positionChanged.connect(self.position_changed)
         self.mediaPlayer.durationChanged.connect(self.duration_changed)
@@ -108,9 +79,6 @@ class Application(Ui_mainWindow):
 
     def set_position(self, position):
         self.mediaPlayer.setPosition(position)
-
-    def clearRubberBandClick(self):
-        self.rubberBandWidget.rubberBand.hide()
 
     def displayGraph(self, videoDuration):
         x = list(range(videoDuration))

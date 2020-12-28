@@ -26,9 +26,9 @@ class Ui_mainWindow(object):
         self.leftVertLayout.setContentsMargins(10, 10, 20, 10)
         self.leftVertLayout.setSpacing(10)
         self.leftVertLayout.setObjectName("leftVertLayout")
-        self.videoLayout = QtWidgets.QHBoxLayout()
-        self.videoLayout.setObjectName("videoLayout")
-        self.leftVertLayout.addLayout(self.videoLayout)
+        self.graphicsView = VideoView(mainWindow)
+        self.graphicsView.setObjectName("graphicsView")
+        self.leftVertLayout.addWidget(self.graphicsView)
         self.videoControlsLayout = QtWidgets.QHBoxLayout()
         self.videoControlsLayout.setObjectName("videoControlsLayout")
         self.playButton = QtWidgets.QPushButton(mainWindow)
@@ -125,13 +125,4 @@ class Ui_mainWindow(object):
         self.showTemperatureDiagram.setText(_translate("mainWindow", "Wyświetl wykres zmiany temperatury"))
         self.exitApplication.setText(_translate("mainWindow", "Wyjdź z programu"))
         self.exitApplication.setShortcut(_translate("mainWindow", "Esc"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    mainWindow = QtWidgets.QDialog()
-    ui = Ui_mainWindow()
-    ui.setupUi(mainWindow)
-    mainWindow.show()
-    sys.exit(app.exec_())
+from videoview import VideoView
