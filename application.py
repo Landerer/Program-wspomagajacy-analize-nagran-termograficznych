@@ -142,7 +142,7 @@ if __name__ == "__main__":
     )
 
     app = QtWidgets.QApplication(sys.argv)
-    mainWindow = QtWidgets.QDialog()
+    mainWindow = QtWidgets.QMainWindow()
     ui = Application()
     ui.setupUi(mainWindow)
     mainWindow.show()
