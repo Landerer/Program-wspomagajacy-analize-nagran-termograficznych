@@ -1,16 +1,20 @@
 import math
 import logging
+import pathlib
 import sys
 from textwrap import dedent
 
+import cv2
 import sqlite3
+import numpy
 
 import pyqtgraph as pg
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QMainWindow, QStyle
 
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QRect, QUrl
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from pyqtgraph.graphicsItems.PlotItem.PlotItem import PlotItem
 
 from interface import Ui_mainWindow
 
@@ -50,16 +54,21 @@ class Application(Ui_mainWindow):
     def createGraphWidget(self):
         plotWidget = pg.PlotWidget()
         self.graphLayout.addWidget(plotWidget)
-        self.plot = plotWidget.getPlotItem().plot([], [])
+        self.plotItem = plotWidget.getPlotItem()
+        self.plot = self.plotItem.plot([], [])
 
     def pickVideoClick(self):
-        aviFile = QFileDialog.getOpenFileName(
+        filePath, _ = QFileDialog.getOpenFileName(
             self.mainWindow, "Otwórz plik", "", "Avi files (*.avi)"
-        )[0]
-
-        self.userId = aviFile[-6:-4]
-        if aviFile != "":
-            self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(aviFile)))
+        )
+        if filePath:
+            self.videoPath = pathlib.Path(filePath)
+            self.userId = self.videoPath.stem[-2:]
+            self.mediaPlayer.setMedia(
+                QMediaContent(QUrl.fromLocalFile(str(self.videoPath)))
+            )
+            self.graphicsView.scene().selectionCallback = self.displayGraph
+            self.displayGraph(self.graphicsView.scene().selection)
 
     def videoAvailableChanged(self, videoAvailable: bool) -> None:
         logging.debug(videoAvailable)
@@ -107,10 +116,24 @@ class Application(Ui_mainWindow):
         if self.rewindVideo:
             self.mediaPlayer.play()
 
-    def displayGraph(self, videoDuration):
-        x = list(range(videoDuration))
-        y = [math.sin(x / 1000 * 2 * math.pi) for x in x]
-        self.plot.setData(x, y)
+    def displayGraph(self, selection: QRect):
+        video = cv2.VideoCapture(str(self.videoPath))
+        if not video.isOpened():
+            logging.error("Couldn't open video %s", str(self.videoPath))
+        values = []
+        while video.isOpened():
+            ret, frame = video.read()
+            if not ret:
+                break
+            if not selection.isEmpty():
+                frame = frame[
+                    selection.top() : selection.bottom(),
+                    selection.left() : selection.right(),
+                ]
+            values.append(numpy.average(frame))
+
+        self.plot.setData(values)
+        self.plotItem.getViewBox().enableAutoRange()
 
     def pickDataBaseClick(self):
         self.dbFile = QFileDialog.getOpenFileName(

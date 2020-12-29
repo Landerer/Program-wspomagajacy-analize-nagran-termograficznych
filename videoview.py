@@ -12,7 +12,7 @@ from PyQt5.QtGui import (
     QPen,
     QResizeEvent,
 )
-from PyQt5.QtCore import QLineF, QPointF, QRectF, QSizeF, Qt
+from PyQt5.QtCore import QLineF, QPointF, QRect, QRectF, QSizeF, Qt
 from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
 
 
@@ -28,6 +28,8 @@ class VideoScene(QGraphicsScene):
         self.rectangle = QGraphicsRectItem()
         self.addItem(self.rectangle)
 
+        self.selectionCallback = None
+
     def videoSizeChanged(self, size: QSizeF):
         logging.debug("%s", size)
         if not size.isEmpty():
@@ -37,10 +39,12 @@ class VideoScene(QGraphicsScene):
 
     def clearSelection(self) -> None:
         self.rectangle.setRect(QRectF())
+        if self.selectionCallback:
+            self.selectionCallback(self.selection)
 
     @property
-    def selection(self) -> Tuple[int, int, int, int]:
-        return self.rectangle.rect().toRect().getCoords()
+    def selection(self) -> QRect:
+        return self.rectangle.rect().toRect()
 
     @staticmethod
     def coerceInside(point: QPointF, rect: QRectF):
@@ -63,7 +67,9 @@ class VideoScene(QGraphicsScene):
 
     def mouseReleaseEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         logging.info("Selection: %s", self.selection)
-        return super().mouseReleaseEvent(event)
+        super().mouseReleaseEvent(event)
+        if self.selectionCallback:
+            self.selectionCallback(self.selection)
 
     def paintGrid(self, painter: QPainter, rect: QRectF, gridSize: int):
         left, top, right, bottom = rect.getCoords()
