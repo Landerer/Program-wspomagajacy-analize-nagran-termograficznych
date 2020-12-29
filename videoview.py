@@ -31,8 +31,6 @@ class VideoScene(QGraphicsScene):
     def videoSizeChanged(self, size: QSizeF):
         logging.debug("%s", size)
         if not size.isEmpty():
-            logging.debug("%s", size)
-            self.videoItem.prepareGeometryChange()
             self.videoItem.setSize(size)
             self.setSceneRect(self.videoItem.boundingRect())
             self.clearSelection()
@@ -59,7 +57,6 @@ class VideoScene(QGraphicsScene):
         return super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent) -> None:
-        self.rectangle.prepareGeometryChange()
         endPos = self.coerceInsideVideo(event.scenePos())
         self.rectangle.setRect(QRectF(self.startPos, endPos).normalized())
         return super().mouseMoveEvent(event)
