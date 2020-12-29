@@ -32,17 +32,20 @@ class Application(Ui_mainWindow):
         self.showDataBase.clicked.connect(self.pickDataBaseClick)
         self.clearScene.clicked.connect(self.graphicsView.scene().clearSelection)
 
-        self.playButton.clicked.connect(self.play_video)
-        self.mediaDurationSlider.sliderMoved.connect(self.set_position)
+        self.playButton.clicked.connect(self.playButtonClicked)
+        self.mediaDurationSlider.sliderMoved.connect(self.mediaPlayer.setPosition)
 
     def createMediaPlayer(self):
         self.mediaPlayer = QMediaPlayer(self.mainWindow)
         self.mediaPlayer.setVideoOutput(self.graphicsView.scene().videoItem)
         self.mediaPlayer.setNotifyInterval(100)
-        self.mediaPlayer.stateChanged.connect(self.mediastate_changed)
-        self.mediaPlayer.positionChanged.connect(self.position_changed)
-        self.mediaPlayer.durationChanged.connect(self.duration_changed)
-        self.mediastate_changed(QMediaPlayer.StoppedState)
+        self.mediaPlayer.videoAvailableChanged.connect(self.videoAvailableChanged)
+        self.mediaPlayer.stateChanged.connect(self.mediaPlayerStateChanged)
+        self.mediaPlayer.positionChanged.connect(self.positionChanged)
+        self.mediaPlayer.durationChanged.connect(self.mediaDurationSlider.setMaximum)
+        self.mediaPlayer.mediaStatusChanged.connect(self.mediaStatusChanged)
+        self.mediaPlayerStateChanged(QMediaPlayer.StoppedState)
+        self.rewindVideo = False
 
     def createGraphWidget(self):
         plotWidget = pg.PlotWidget()
@@ -57,17 +60,38 @@ class Application(Ui_mainWindow):
         self.userId = aviFile[-6:-4]
         if aviFile != "":
             self.mediaPlayer.setMedia(QMediaContent(QUrl.fromLocalFile(aviFile)))
-            self.playButton.setEnabled(True)
-            self.mediaDurationSlider.setEnabled(True)
 
-    def play_video(self):
+    def videoAvailableChanged(self, videoAvailable: bool) -> None:
+        logging.debug(videoAvailable)
+        self.playButton.setEnabled(videoAvailable)
+        self.mediaDurationSlider.setEnabled(videoAvailable)
+
+    def mediaStatusChanged(self, status: QMediaPlayer.MediaStatus) -> None:
+        logging.debug(status)
+        if status == QMediaPlayer.LoadedMedia:
+            if not self.rewindVideo:
+                self.mediaPlayer.pause()
+            else:
+                self.rewindVideo = False
+                self.mediaPlayer.play()
+        elif status == QMediaPlayer.EndOfMedia:
+            if not self.rewindVideo:
+                self.mediaPlayer.pause()
+                self.mediaPlayer.setPosition(self.mediaPlayer.duration())
+
+    def playButtonClicked(self):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
             self.mediaPlayer.pause()
         else:
-            self.mediaPlayer.play()
+            if self.mediaPlayer.position() == self.mediaPlayer.duration():
+                self.rewindVideo = True
+                self.mediaPlayer.setPosition(0)
+            else:
+                self.mediaPlayer.play()
 
-    def mediastate_changed(self, state):
-        if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
+    def mediaPlayerStateChanged(self, state: QMediaPlayer.PlayingState):
+        logging.debug(state)
+        if state == QMediaPlayer.PlayingState:
             buttonText = "Pause"
             buttonIcon = QStyle.SP_MediaPause
         else:
@@ -77,16 +101,11 @@ class Application(Ui_mainWindow):
         self.playButton.setText(buttonText)
         self.playButton.setIcon(self.playButton.style().standardIcon(buttonIcon))
 
-    def position_changed(self, position):
+    def positionChanged(self, position: int):
+        # logging.debug("pos=%d rewind=%d", position, self.rewindVideo)
         self.mediaDurationSlider.setValue(position)
-
-    def duration_changed(self, duration):
-        logging.debug(duration)
-        self.mediaDurationSlider.setRange(0, duration)
-        self.displayGraph(duration)
-
-    def set_position(self, position):
-        self.mediaPlayer.setPosition(position)
+        if self.rewindVideo:
+            self.mediaPlayer.play()
 
     def displayGraph(self, videoDuration):
         x = list(range(videoDuration))
@@ -108,7 +127,6 @@ class Application(Ui_mainWindow):
             self.displayData()
 
     def displayData(self):
-
         with sqlite3.connect(self.dbFile) as connection:
             connection.row_factory = sqlite3.Row
             cursor = connection.cursor()
