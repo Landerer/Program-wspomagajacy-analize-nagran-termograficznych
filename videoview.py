@@ -1,5 +1,4 @@
 import logging
-from typing import Tuple
 
 from PyQt5.QtWidgets import (
     QGraphicsRectItem,
@@ -12,11 +11,21 @@ from PyQt5.QtGui import (
     QPen,
     QResizeEvent,
 )
-from PyQt5.QtCore import QLineF, QPointF, QRect, QRectF, QSizeF, Qt
+from PyQt5.QtCore import (
+    QLineF,
+    QPointF,
+    QRect,
+    QRectF,
+    QSizeF,
+    Qt,
+    pyqtSignal as Signal,
+)
 from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
 
 
 class VideoScene(QGraphicsScene):
+    regionSelected = Signal(QRect)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -28,8 +37,6 @@ class VideoScene(QGraphicsScene):
         self.rectangle = QGraphicsRectItem()
         self.addItem(self.rectangle)
 
-        self.selectionCallback = None
-
     def videoSizeChanged(self, size: QSizeF):
         logging.debug("%s", size)
         if not size.isEmpty():
@@ -39,8 +46,7 @@ class VideoScene(QGraphicsScene):
 
     def clearSelection(self) -> None:
         self.rectangle.setRect(QRectF())
-        if self.selectionCallback:
-            self.selectionCallback(self.selection)
+        self.regionSelected.emit(self.selection)
 
     @property
     def selection(self) -> QRect:
@@ -68,8 +74,7 @@ class VideoScene(QGraphicsScene):
     def mouseReleaseEvent(self, event: QGraphicsSceneMouseEvent) -> None:
         logging.info("Selection: %s", self.selection)
         super().mouseReleaseEvent(event)
-        if self.selectionCallback:
-            self.selectionCallback(self.selection)
+        self.regionSelected.emit(self.selection)
 
     def paintGrid(self, painter: QPainter, rect: QRectF, gridSize: int):
         left, top, right, bottom = rect.getCoords()

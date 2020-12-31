@@ -1,4 +1,3 @@
-import math
 import logging
 import pathlib
 import sys
@@ -12,14 +11,13 @@ import pyqtgraph as pg
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QMainWindow, QStyle
 
-from PyQt5.QtCore import QRect, QUrl
+from PyQt5.QtCore import QObject, QRect, QUrl, pyqtSlot as Slot
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
-from pyqtgraph.graphicsItems.PlotItem.PlotItem import PlotItem
 
 from interface import Ui_mainWindow
 
 
-class Application(Ui_mainWindow):
+class Application(QObject, Ui_mainWindow):
     def __init__(self, mainWindow: QMainWindow):
         super().__init__()
         self.mainWindow = mainWindow
@@ -57,6 +55,7 @@ class Application(Ui_mainWindow):
         self.plotItem = plotWidget.getPlotItem()
         self.plot = self.plotItem.plot([], [])
 
+    @Slot()
     def pickVideoClick(self):
         filePath, _ = QFileDialog.getOpenFileName(
             self.mainWindow, "Otwórz plik", "", "Avi files (*.avi)"
@@ -67,14 +66,16 @@ class Application(Ui_mainWindow):
             self.mediaPlayer.setMedia(
                 QMediaContent(QUrl.fromLocalFile(str(self.videoPath)))
             )
-            self.graphicsView.scene().selectionCallback = self.displayGraph
+            self.graphicsView.scene().regionSelected.connect(self.displayGraph)
             self.displayGraph(self.graphicsView.scene().selection)
 
+    @Slot(bool)
     def videoAvailableChanged(self, videoAvailable: bool) -> None:
         logging.debug(videoAvailable)
         self.playButton.setEnabled(videoAvailable)
         self.mediaDurationSlider.setEnabled(videoAvailable)
 
+    @Slot(QMediaPlayer.MediaStatus)
     def mediaStatusChanged(self, status: QMediaPlayer.MediaStatus) -> None:
         logging.debug(status)
         if status == QMediaPlayer.LoadedMedia:
@@ -88,6 +89,7 @@ class Application(Ui_mainWindow):
                 self.mediaPlayer.pause()
                 self.mediaPlayer.setPosition(self.mediaPlayer.duration())
 
+    @Slot()
     def playButtonClicked(self):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
             self.mediaPlayer.pause()
@@ -98,6 +100,7 @@ class Application(Ui_mainWindow):
             else:
                 self.mediaPlayer.play()
 
+    @Slot(QMediaPlayer.State)
     def mediaPlayerStateChanged(self, state: QMediaPlayer.PlayingState):
         logging.debug(state)
         if state == QMediaPlayer.PlayingState:
@@ -110,12 +113,14 @@ class Application(Ui_mainWindow):
         self.playButton.setText(buttonText)
         self.playButton.setIcon(self.playButton.style().standardIcon(buttonIcon))
 
+    @Slot("qint64")
     def positionChanged(self, position: int):
         # logging.debug("pos=%d rewind=%d", position, self.rewindVideo)
         self.mediaDurationSlider.setValue(position)
         if self.rewindVideo:
             self.mediaPlayer.play()
 
+    @Slot(QRect)
     def displayGraph(self, selection: QRect):
         video = cv2.VideoCapture(str(self.videoPath))
         if not video.isOpened():
@@ -135,6 +140,7 @@ class Application(Ui_mainWindow):
         self.plot.setData(values)
         self.plotItem.getViewBox().enableAutoRange()
 
+    @Slot()
     def pickDataBaseClick(self):
         self.dbFile = QFileDialog.getOpenFileName(
             self.mainWindow, "Otwórz bazę danych", "", "Database files (*.db)"
