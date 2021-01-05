@@ -54,7 +54,9 @@ class Application(QObject, Ui_mainWindow):
         plotWidget = pg.PlotWidget()
         self.graphLayout.addWidget(plotWidget)
         self.plotItem = plotWidget.getPlotItem()
-        self.plot = self.plotItem.plot([], [])
+        self.plotItem.showGrid(x=True, y=True)
+        self.plot = self.plotItem.plot()
+        self.plotCurrent = self.plotItem.plot(symbol="x")
 
     @Slot()
     def pickVideoClick(self):
@@ -114,15 +116,20 @@ class Application(QObject, Ui_mainWindow):
     def positionChanged(self, position: int):
         # logging.debug("pos=%d rewind=%d", position, self.rewindVideo)
         self.mediaDurationSlider.setValue(position)
+        self.displayCurrentTemperature(position)
         if self.rewindVideo:
             self.mediaPlayer.play()
+
+    def displayCurrentTemperature(self, position):
+        temperature = self.values[position]
+        self.plotCurrent.setData([position], [temperature])
 
     @Slot(QRect)
     def displayGraph(self, selection: QRect):
         reader = self.mediaPlayer.reader()
         if not reader:
             logging.error("Video not available")
-        times, values = [], []
+        self.values = []
         for frame_number in range(reader.num_frames):
             frame = reader.frame(frame_number)
             temperatures = frame.data
@@ -131,10 +138,10 @@ class Application(QObject, Ui_mainWindow):
                     selection.top() : selection.bottom(),
                     selection.left() : selection.right(),
                 ]
-            values.append(numpy.average(temperatures))
-            times.append(frame.time)
+            self.values.append(numpy.average(temperatures))
 
-        self.plot.setData(values)
+        self.plot.setData(self.values)
+        self.displayCurrentTemperature(self.mediaPlayer.position())
         self.plotItem.getViewBox().enableAutoRange()
 
     @Slot()
