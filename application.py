@@ -15,6 +15,7 @@ from PyQt5.QtCore import QObject, QRect, QUrl, pyqtSlot as Slot
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 
 from interface import Ui_mainWindow
+from seqplayer import SeqPlayer
 
 
 class Application(QObject, Ui_mainWindow):
@@ -36,16 +37,16 @@ class Application(QObject, Ui_mainWindow):
 
         self.playButton.clicked.connect(self.playButtonClicked)
         self.mediaDurationSlider.sliderMoved.connect(self.mediaPlayer.setPosition)
+        self.graphicsView.scene().regionSelected.connect(self.displayGraph)
 
     def createMediaPlayer(self):
-        self.mediaPlayer = QMediaPlayer(self.mainWindow)
+        self.mediaPlayer = SeqPlayer(self.mainWindow)
         self.mediaPlayer.setVideoOutput(self.graphicsView.scene().videoItem)
         self.mediaPlayer.setNotifyInterval(100)
         self.mediaPlayer.videoAvailableChanged.connect(self.videoAvailableChanged)
         self.mediaPlayer.stateChanged.connect(self.mediaPlayerStateChanged)
         self.mediaPlayer.positionChanged.connect(self.positionChanged)
         self.mediaPlayer.durationChanged.connect(self.mediaDurationSlider.setMaximum)
-        self.mediaPlayer.mediaStatusChanged.connect(self.mediaStatusChanged)
         self.mediaPlayerStateChanged(QMediaPlayer.StoppedState)
         self.rewindVideo = False
 
@@ -58,16 +59,12 @@ class Application(QObject, Ui_mainWindow):
     @Slot()
     def pickVideoClick(self):
         filePath, _ = QFileDialog.getOpenFileName(
-            self.mainWindow, "Otwórz plik", "", "Avi files (*.avi)"
+            self.mainWindow, "Otwórz plik", "", "SEQ files (*.seq)"
         )
         if filePath:
             self.videoPath = pathlib.Path(filePath)
             self.userId = self.videoPath.stem[-2:]
-            self.mediaPlayer.setMedia(
-                QMediaContent(QUrl.fromLocalFile(str(self.videoPath)))
-            )
-            self.graphicsView.scene().regionSelected.connect(self.displayGraph)
-            self.displayGraph(self.graphicsView.scene().selection)
+            self.mediaPlayer.setFile(self.videoPath)
 
     @Slot(bool)
     def videoAvailableChanged(self, videoAvailable: bool) -> None:
@@ -113,7 +110,7 @@ class Application(QObject, Ui_mainWindow):
         self.playButton.setText(buttonText)
         self.playButton.setIcon(self.playButton.style().standardIcon(buttonIcon))
 
-    @Slot("qint64")
+    @Slot(int)
     def positionChanged(self, position: int):
         # logging.debug("pos=%d rewind=%d", position, self.rewindVideo)
         self.mediaDurationSlider.setValue(position)
@@ -122,20 +119,20 @@ class Application(QObject, Ui_mainWindow):
 
     @Slot(QRect)
     def displayGraph(self, selection: QRect):
-        video = cv2.VideoCapture(str(self.videoPath))
-        if not video.isOpened():
-            logging.error("Couldn't open video %s", str(self.videoPath))
-        values = []
-        while video.isOpened():
-            ret, frame = video.read()
-            if not ret:
-                break
+        reader = self.mediaPlayer.reader()
+        if not reader:
+            logging.error("Video not available")
+        times, values = [], []
+        for frame_number in range(reader.num_frames):
+            frame = reader.frame(frame_number)
+            temperatures = frame.data
             if not selection.isEmpty():
-                frame = frame[
+                temperatures = temperatures[
                     selection.top() : selection.bottom(),
                     selection.left() : selection.right(),
                 ]
-            values.append(numpy.average(frame))
+            values.append(numpy.average(temperatures))
+            times.append(frame.time)
 
         self.plot.setData(values)
         self.plotItem.getViewBox().enableAutoRange()
