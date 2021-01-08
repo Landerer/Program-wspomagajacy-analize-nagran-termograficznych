@@ -3,7 +3,6 @@ import pathlib
 import sys
 from textwrap import dedent
 
-import cv2
 import sqlite3
 import numpy
 
@@ -11,8 +10,9 @@ import pyqtgraph as pg
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QFileDialog, QMainWindow, QStyle
 
-from PyQt5.QtCore import QObject, QRect, QUrl, pyqtSlot as Slot
-from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+from PyQt5.QtCore import QObject, QRect, pyqtSlot as Slot
+from PyQt5.QtMultimedia import QMediaPlayer
+from pyqtgraph.graphicsItems.TextItem import TextItem
 
 from interface import Ui_mainWindow
 from seqplayer import SeqPlayer
@@ -55,17 +55,22 @@ class Application(QObject, Ui_mainWindow):
         self.graphLayout.addWidget(plotWidget)
         self.plotItem = plotWidget.getPlotItem()
         self.plotItem.showGrid(x=True, y=True)
+        self.plotItem.setLabel("left", "Średnia temperatura [°C]")
+        self.plotItem.setLabel("bottom", "Czas [s]")
         self.plot = self.plotItem.plot()
-        self.plotCurrent = self.plotItem.plot(symbol="x")
+        self.plotCurrent = self.plotItem.plot(
+            symbol="o", symbolPen=(0, 122, 217), symbolBrush=(0, 122, 217)
+        )
+        self.currentLabel = TextItem("cell", (255, 255, 255), anchor=(0, 0))
 
     @Slot()
     def pickVideoClick(self):
         filePath, _ = QFileDialog.getOpenFileName(
-            self.mainWindow, "Otwórz plik", "", "SEQ files (*.seq)"
+            self.mainWindow, "Otwórz plik", "", "SEQ files (*.seq);;IMG files (*.img)"
         )
         if filePath:
             self.videoPath = pathlib.Path(filePath)
-            self.userId = self.videoPath.stem[-2:]
+            self.userId = self.videoPath.stem[0:2]
             self.mediaPlayer.setFile(self.videoPath)
 
     @Slot(bool)
@@ -123,6 +128,10 @@ class Application(QObject, Ui_mainWindow):
     def displayCurrentTemperature(self, position):
         temperature = self.values[position]
         self.plotCurrent.setData([position], [temperature])
+        self.currentLabel.setPos(position, temperature)
+        self.currentLabel.setText(f"{position}, {temperature:.2f}")
+        if self.currentLabel not in self.plotItem.items:
+            self.plotItem.addItem(self.currentLabel)
 
     @Slot(QRect)
     def displayGraph(self, selection: QRect):
@@ -142,7 +151,8 @@ class Application(QObject, Ui_mainWindow):
 
         self.plot.setData(self.values)
         self.displayCurrentTemperature(self.mediaPlayer.position())
-        self.plotItem.getViewBox().enableAutoRange()
+        self.plotItem.getViewBox().autoRange(padding=0.11)
+        self.plotItem.getViewBox().setRange(xRange=(-10, reader.num_frames * 1.12))
 
     @Slot()
     def pickDataBaseClick(self):
