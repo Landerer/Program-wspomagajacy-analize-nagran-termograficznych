@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(1070, 802)
+        mainWindow.resize(1108, 802)
         font = QtGui.QFont()
         font.setPointSize(10)
         mainWindow.setFont(font)
@@ -57,10 +57,14 @@ class Ui_mainWindow(object):
         self.rightVertLayout.setSpacing(10)
         self.rightVertLayout.setObjectName("rightVertLayout")
         self.pickDirectory = QtWidgets.QPushButton(self.centralwidget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pickDirectory.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.pickDirectory.sizePolicy().hasHeightForWidth()
+        )
         self.pickDirectory.setSizePolicy(sizePolicy)
         self.pickDirectory.setSizeIncrement(QtCore.QSize(0, 0))
         font = QtGui.QFont()
@@ -76,7 +80,9 @@ class Ui_mainWindow(object):
         self.showDataBase.setChecked(False)
         self.showDataBase.setObjectName("showDataBase")
         self.rightVertLayout.addWidget(self.showDataBase)
-        spacerItem = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        spacerItem = QtWidgets.QSpacerItem(
+            20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred
+        )
         self.rightVertLayout.addItem(spacerItem)
         self.clearScene = QtWidgets.QPushButton(self.centralwidget)
         font = QtGui.QFont()
@@ -86,24 +92,20 @@ class Ui_mainWindow(object):
         self.clearScene.setChecked(False)
         self.clearScene.setObjectName("clearScene")
         self.rightVertLayout.addWidget(self.clearScene)
-        self.showTemperatureDiagram = QtWidgets.QPushButton(self.centralwidget)
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.showTemperatureDiagram.setFont(font)
-        self.showTemperatureDiagram.setCheckable(False)
-        self.showTemperatureDiagram.setChecked(False)
-        self.showTemperatureDiagram.setObjectName("showTemperatureDiagram")
-        self.rightVertLayout.addWidget(self.showTemperatureDiagram)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 30, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            20, 30, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum
+        )
         self.rightVertLayout.addItem(spacerItem1)
         self.userData = QtWidgets.QTextEdit(self.centralwidget)
         self.userData.setEnabled(True)
-        self.userData.setMinimumSize(QtCore.QSize(350, 0))
+        self.userData.setMinimumSize(QtCore.QSize(400, 0))
         self.userData.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
         self.userData.setReadOnly(True)
         self.userData.setObjectName("userData")
         self.rightVertLayout.addWidget(self.userData)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred
+        )
         self.rightVertLayout.addItem(spacerItem2)
         self.exitApplication = QtWidgets.QPushButton(self.centralwidget)
         font = QtGui.QFont()
@@ -120,12 +122,19 @@ class Ui_mainWindow(object):
 
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
-        mainWindow.setWindowTitle(_translate("mainWindow", "Oprogramowanie wspomagające diagnozę objawu Raynauda"))
+        mainWindow.setWindowTitle(
+            _translate(
+                "mainWindow", "Oprogramowanie wspomagające diagnozę objawu Raynauda"
+            )
+        )
         self.playButton.setText(_translate("mainWindow", "Play"))
         self.pickDirectory.setText(_translate("mainWindow", "Wybierz plik wideo"))
-        self.showDataBase.setText(_translate("mainWindow", "Wyświetl dane z bazy danych"))
+        self.showDataBase.setText(
+            _translate("mainWindow", "Wyświetl dane z bazy danych")
+        )
         self.clearScene.setText(_translate("mainWindow", "Wyczyść zaznaczenie"))
-        self.showTemperatureDiagram.setText(_translate("mainWindow", "Wyświetl wykres zmiany temperatury"))
         self.exitApplication.setText(_translate("mainWindow", "Wyjdź z programu"))
         self.exitApplication.setShortcut(_translate("mainWindow", "Esc"))
+
+
 from videoview import VideoView

@@ -1,274 +1,256 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>mainWindow</class>
-    <widget class="QMainWindow" name="mainWindow">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>1070</width>
-                <height>802</height>
-            </rect>
+ <class>mainWindow</class>
+ <widget class="QMainWindow" name="mainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1108</width>
+    <height>802</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Oprogramowanie wspomagające diagnozę objawu Raynauda</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="mainLayout" stretch="2,0">
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <item>
+     <layout class="QVBoxLayout" name="leftVertLayout" stretch="2,0,1">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>20</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="VideoView" name="graphicsView"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="videoControlsLayout">
+        <item>
+         <widget class="QPushButton" name="playButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Play</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="mediaDurationSlider">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="graphLayout"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="rightVertLayout">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinAndMaxSize</enum>
+      </property>
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="pickDirectory">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="sizeIncrement">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
         </property>
         <property name="font">
-            <font>
-                <pointsize>10</pointsize>
-            </font>
+         <font>
+          <pointsize>10</pointsize>
+         </font>
         </property>
-        <property name="windowTitle">
-            <string>Oprogramowanie wspomagające diagnozę objawu Raynauda</string>
+        <property name="text">
+         <string>Wybierz plik wideo</string>
         </property>
-        <widget class="QWidget" name="centralwidget">
-            <layout class="QHBoxLayout" name="mainLayout" stretch="2,0">
-                <property name="spacing">
-                    <number>10</number>
-                </property>
-                <item>
-                    <layout class="QVBoxLayout" name="leftVertLayout" stretch="2,0,1">
-                        <property name="spacing">
-                            <number>10</number>
-                        </property>
-                        <property name="leftMargin">
-                            <number>10</number>
-                        </property>
-                        <property name="topMargin">
-                            <number>10</number>
-                        </property>
-                        <property name="rightMargin">
-                            <number>20</number>
-                        </property>
-                        <property name="bottomMargin">
-                            <number>10</number>
-                        </property>
-                        <item>
-                            <widget class="VideoView" name="graphicsView"/>
-                        </item>
-                        <item>
-                            <layout class="QHBoxLayout" name="videoControlsLayout">
-                                <item>
-                                    <widget class="QPushButton" name="playButton">
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="font">
-                                            <font>
-                                                <pointsize>10</pointsize>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>Play</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                                <item>
-                                    <widget class="QSlider" name="mediaDurationSlider">
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Qt::Horizontal</enum>
-                                        </property>
-                                    </widget>
-                                </item>
-                            </layout>
-                        </item>
-                        <item>
-                            <layout class="QHBoxLayout" name="graphLayout"/>
-                        </item>
-                    </layout>
-                </item>
-                <item>
-                    <layout class="QVBoxLayout" name="rightVertLayout">
-                        <property name="spacing">
-                            <number>10</number>
-                        </property>
-                        <property name="sizeConstraint">
-                            <enum>QLayout::SetMinAndMaxSize</enum>
-                        </property>
-                        <property name="leftMargin">
-                            <number>10</number>
-                        </property>
-                        <property name="topMargin">
-                            <number>10</number>
-                        </property>
-                        <property name="rightMargin">
-                            <number>10</number>
-                        </property>
-                        <property name="bottomMargin">
-                            <number>10</number>
-                        </property>
-                        <item>
-                            <widget class="QPushButton" name="pickDirectory">
-                                <property name="sizePolicy">
-                                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="sizeIncrement">
-                                    <size>
-                                        <width>0</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <pointsize>10</pointsize>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>Wybierz plik wideo</string>
-                                </property>
-                            </widget>
-                        </item>
-                        <item>
-                            <widget class="QPushButton" name="showDataBase">
-                                <property name="font">
-                                    <font>
-                                        <pointsize>10</pointsize>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>Wyświetl dane z bazy danych</string>
-                                </property>
-                                <property name="checkable">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="checked">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                        </item>
-                        <item>
-                            <spacer name="verticalSpacer_3">
-                                <property name="orientation">
-                                    <enum>Qt::Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>QSizePolicy::Preferred</enum>
-                                </property>
-                                <property name="sizeHint" stdset="0">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </item>
-                        <item>
-                            <widget class="QPushButton" name="clearScene">
-                                <property name="font">
-                                    <font>
-                                        <pointsize>10</pointsize>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>Wyczyść zaznaczenie</string>
-                                </property>
-                                <property name="checkable">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="checked">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                        </item>
-                        <item>
-                            <widget class="QPushButton" name="showTemperatureDiagram">
-                                <property name="font">
-                                    <font>
-                                        <pointsize>10</pointsize>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>Wyświetl wykres zmiany temperatury</string>
-                                </property>
-                                <property name="checkable">
-                                    <bool>false</bool>
-                                </property>
-                                <property name="checked">
-                                    <bool>false</bool>
-                                </property>
-                            </widget>
-                        </item>
-                        <item>
-                            <spacer name="verticalSpacer_2">
-                                <property name="orientation">
-                                    <enum>Qt::Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>QSizePolicy::Maximum</enum>
-                                </property>
-                                <property name="sizeHint" stdset="0">
-                                    <size>
-                                        <width>20</width>
-                                        <height>30</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </item>
-                        <item>
-                            <widget class="QTextEdit" name="userData">
-                                <property name="enabled">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>350</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="lineWrapMode">
-                                    <enum>QTextEdit::NoWrap</enum>
-                                </property>
-                                <property name="readOnly">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                        </item>
-                        <item>
-                            <spacer name="verticalSpacer_4">
-                                <property name="orientation">
-                                    <enum>Qt::Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>QSizePolicy::Preferred</enum>
-                                </property>
-                                <property name="sizeHint" stdset="0">
-                                    <size>
-                                        <width>20</width>
-                                        <height>10</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </item>
-                        <item>
-                            <widget class="QPushButton" name="exitApplication">
-                                <property name="font">
-                                    <font>
-                                        <pointsize>10</pointsize>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>Wyjdź z programu</string>
-                                </property>
-                                <property name="shortcut">
-                                    <string>Esc</string>
-                                </property>
-                            </widget>
-                        </item>
-                    </layout>
-                </item>
-            </layout>
-        </widget>
-    </widget>
-    <customwidgets>
-        <customwidget>
-            <class>VideoView</class>
-            <extends>QGraphicsView</extends>
-            <header>videoview</header>
-        </customwidget>
-    </customwidgets>
-    <resources/>
-    <connections/>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="showDataBase">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Wyświetl dane z bazy danych</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Preferred</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="clearScene">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Wyczyść zaznaczenie</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Maximum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>30</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QTextEdit" name="userData">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="lineWrapMode">
+         <enum>QTextEdit::NoWrap</enum>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Preferred</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>10</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="exitApplication">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Wyjdź z programu</string>
+        </property>
+        <property name="shortcut">
+         <string>Esc</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>VideoView</class>
+   <extends>QGraphicsView</extends>
+   <header>videoview</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
 </ui>
