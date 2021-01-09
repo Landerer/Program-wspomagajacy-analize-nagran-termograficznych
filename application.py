@@ -47,7 +47,7 @@ class Application(QObject, Ui_mainWindow):
             self.mediaDurationSlider.setEnabled
         )
         self.mediaPlayer.stateChanged.connect(self.mediaPlayerStateChanged)
-        self.mediaPlayer.durationChanged.connect(self.mediaDurationSlider.setMaximum)
+        self.mediaPlayer.durationChanged.connect(self.durationChanged)
         self.mediaPlayer.positionChanged.connect(self.mediaDurationSlider.setValue)
         self.mediaPlayer.positionChanged.connect(self.displayCurrentTemperature)
         self.mediaPlayerStateChanged(QMediaPlayer.StoppedState)
@@ -83,6 +83,10 @@ class Application(QObject, Ui_mainWindow):
         else:
             self.mediaPlayer.play()
 
+    @Slot(int)
+    def durationChanged(self, duration: int):
+        self.mediaDurationSlider.setMaximum(duration - 1)
+
     @Slot(QMediaPlayer.State)
     def mediaPlayerStateChanged(self, state: QMediaPlayer.PlayingState):
         if state == QMediaPlayer.PlayingState:
@@ -96,7 +100,7 @@ class Application(QObject, Ui_mainWindow):
         self.playButton.setIcon(self.playButton.style().standardIcon(buttonIcon))
 
     @Slot(int)
-    def displayCurrentTemperature(self, position):
+    def displayCurrentTemperature(self, position: int):
         temperature = self.values[position]
         self.plotCurrent.setData([position], [temperature])
         self.currentLabel.setPos(position, temperature)
