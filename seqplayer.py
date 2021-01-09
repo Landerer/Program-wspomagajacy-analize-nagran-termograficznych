@@ -95,6 +95,7 @@ class SeqPlayer(QObject):
             raise
         self.videoAvailableChanged.emit(True)
         self.durationChanged.emit(self.duration())
+        self.pause()
         self.setPosition(0)
         self.displayFrame()
 

@@ -74,6 +74,7 @@ class Application(QObject, Ui_mainWindow):
             self.videoPath = pathlib.Path(filePath)
             self.userId = self.videoPath.stem[0:2]
             self.mediaPlayer.setFile(self.videoPath)
+            self.graphicsView.scene().clearSelection()
 
     @Slot()
     def playButtonClicked(self):
