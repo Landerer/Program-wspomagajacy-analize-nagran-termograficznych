@@ -72,7 +72,6 @@ class SeqPlayer(QObject):
     durationChanged = Signal(int)
     positionChanged = Signal(int)
     stateChanged = Signal(QMediaPlayer.State)
-    notifyIntervalChanged = Signal(int)
 
     def __init__(
         self, parent: Optional[QObject], visualiser: Optional[FrameVisualiser] = None
@@ -81,7 +80,6 @@ class SeqPlayer(QObject):
         self.visualiser = visualiser if visualiser else FrameVisualiser()
         self._reader: Optional[SeqReader] = None
         self._videoOutput: Optional[QGraphicsVideoItem] = None
-        self._notifyInterval: int = 1000
         self._position: int = 0
         self._state: QMediaPlayer.State = QMediaPlayer.StoppedState
         self._timer = QTimer()
@@ -130,17 +128,10 @@ class SeqPlayer(QObject):
         self._state = state
         self.stateChanged.emit(state)
 
-    def notifyInterval(self) -> int:
-        return self._notifyInterval
-
-    @Slot(int)
-    def setNotifyInterval(self, interval: int) -> None:
-        if self._notifyInterval != interval:
-            self._notifyInterval = interval
-            self.notifyIntervalChanged.emit(interval)
-
     def play(self):
         self.setState(QMediaPlayer.PlayingState)
+        if self.position() == self.duration() - 1:
+            self.setPosition(0)
         self._timer.start()
 
     def pause(self):
@@ -150,6 +141,8 @@ class SeqPlayer(QObject):
     def displayNextFrame(self):
         self.setPosition(self.position() + 1)
         self.displayFrame()
+        if self.position() == self.duration() - 1:
+            self.pause()
 
     def displayFrame(self) -> None:
         if not self._reader:

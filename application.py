@@ -42,13 +42,15 @@ class Application(QObject, Ui_mainWindow):
     def createMediaPlayer(self):
         self.mediaPlayer = SeqPlayer(self.mainWindow)
         self.mediaPlayer.setVideoOutput(self.graphicsView.scene().videoItem)
-        self.mediaPlayer.setNotifyInterval(100)
-        self.mediaPlayer.videoAvailableChanged.connect(self.videoAvailableChanged)
+        self.mediaPlayer.videoAvailableChanged.connect(self.playButton.setEnabled)
+        self.mediaPlayer.videoAvailableChanged.connect(
+            self.mediaDurationSlider.setEnabled
+        )
         self.mediaPlayer.stateChanged.connect(self.mediaPlayerStateChanged)
-        self.mediaPlayer.positionChanged.connect(self.positionChanged)
         self.mediaPlayer.durationChanged.connect(self.mediaDurationSlider.setMaximum)
+        self.mediaPlayer.positionChanged.connect(self.mediaDurationSlider.setValue)
+        self.mediaPlayer.positionChanged.connect(self.displayCurrentTemperature)
         self.mediaPlayerStateChanged(QMediaPlayer.StoppedState)
-        self.rewindVideo = False
 
     def createGraphWidget(self):
         plotWidget = pg.PlotWidget()
@@ -73,40 +75,15 @@ class Application(QObject, Ui_mainWindow):
             self.userId = self.videoPath.stem[0:2]
             self.mediaPlayer.setFile(self.videoPath)
 
-    @Slot(bool)
-    def videoAvailableChanged(self, videoAvailable: bool) -> None:
-        logging.debug(videoAvailable)
-        self.playButton.setEnabled(videoAvailable)
-        self.mediaDurationSlider.setEnabled(videoAvailable)
-
-    @Slot(QMediaPlayer.MediaStatus)
-    def mediaStatusChanged(self, status: QMediaPlayer.MediaStatus) -> None:
-        logging.debug(status)
-        if status == QMediaPlayer.LoadedMedia:
-            if not self.rewindVideo:
-                self.mediaPlayer.pause()
-            else:
-                self.rewindVideo = False
-                self.mediaPlayer.play()
-        elif status == QMediaPlayer.EndOfMedia:
-            if not self.rewindVideo:
-                self.mediaPlayer.pause()
-                self.mediaPlayer.setPosition(self.mediaPlayer.duration())
-
     @Slot()
     def playButtonClicked(self):
         if self.mediaPlayer.state() == QMediaPlayer.PlayingState:
             self.mediaPlayer.pause()
         else:
-            if self.mediaPlayer.position() == self.mediaPlayer.duration():
-                self.rewindVideo = True
-                self.mediaPlayer.setPosition(0)
-            else:
-                self.mediaPlayer.play()
+            self.mediaPlayer.play()
 
     @Slot(QMediaPlayer.State)
     def mediaPlayerStateChanged(self, state: QMediaPlayer.PlayingState):
-        logging.debug(state)
         if state == QMediaPlayer.PlayingState:
             buttonText = "Pause"
             buttonIcon = QStyle.SP_MediaPause
@@ -118,13 +95,6 @@ class Application(QObject, Ui_mainWindow):
         self.playButton.setIcon(self.playButton.style().standardIcon(buttonIcon))
 
     @Slot(int)
-    def positionChanged(self, position: int):
-        # logging.debug("pos=%d rewind=%d", position, self.rewindVideo)
-        self.mediaDurationSlider.setValue(position)
-        self.displayCurrentTemperature(position)
-        if self.rewindVideo:
-            self.mediaPlayer.play()
-
     def displayCurrentTemperature(self, position):
         temperature = self.values[position]
         self.plotCurrent.setData([position], [temperature])
