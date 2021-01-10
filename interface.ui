@@ -129,7 +129,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Wyświetl dane z bazy danych</string>
+         <string>Wybierz plik bazy danych</string>
         </property>
         <property name="checkable">
          <bool>false</bool>
@@ -184,7 +184,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>30</height>
+          <height>20</height>
          </size>
         </property>
        </spacer>

@@ -22,6 +22,8 @@ class Application(QObject, Ui_mainWindow):
     def __init__(self, mainWindow: QMainWindow):
         super().__init__()
         self.mainWindow = mainWindow
+        self.userId: int = 0
+        self.dbFile: str = ""
         self.setupUi()
         mainWindow.show()
 
@@ -75,6 +77,7 @@ class Application(QObject, Ui_mainWindow):
             self.userId = self.videoPath.stem[0:2]
             self.mediaPlayer.setFile(self.videoPath)
             self.graphicsView.scene().clearSelection()
+            self.displayUserData()
 
     @Slot()
     def playButtonClicked(self):
@@ -129,54 +132,72 @@ class Application(QObject, Ui_mainWindow):
         self.plotItem.getViewBox().autoRange(padding=0.11)
         self.plotItem.getViewBox().setRange(xRange=(-10, reader.num_frames * 1.12))
 
+    def getSurveyResults(self, userId: int):
+        with sqlite3.connect(self.dbFile) as connection:
+            connection.row_factory = sqlite3.Row
+            cursor = connection.cursor()
+            return cursor.execute(
+                "SELECT * FROM Ankieta WHERE Id=?", (userId,)
+            ).fetchall()
+
     @Slot()
     def pickDataBaseClick(self):
-        self.dbFile = QFileDialog.getOpenFileName(
+        dbFile, _ = QFileDialog.getOpenFileName(
             self.mainWindow, "Otwórz bazę danych", "", "Database files (*.db)"
-        )[0]
+        )
+        if dbFile:
+            self.dbFile = dbFile
+            self.displayUserData()
 
-        with sqlite3.connect(self.dbFile) as connection:
-            connection.row_factory = sqlite3.Row
-            cursor = connection.cursor()
+    def displayUserData(self):
+        if not self.dbFile:
+            self.userData.setText("Otwórz plik bazy danych")
+        elif not self.userId:
+            self.userData.setText("Załaduj plik z obrazem")
+        else:
+            try:
+                surveyResults = self.getSurveyResults(self.userId)
+                if surveyResults:
+                    self.displaySurveyResults(surveyResults[0])
+                else:
+                    self.userData.setText(
+                        dedent(
+                            f"""\
+                            Brak pasującego wyniku w bazie danych
+                             dla użytkownika o ID "{self.userId}"
+                            (dwa pierwsze znaki nazwy pliku wideo)
+                            """
+                        )
+                    )
+            except Exception as e:
+                self.userData.setText(f"Nie udało się otworzyć bazy danych:\n {e}")
 
-            idList = [
-                str(row["Id"]) for row in cursor.execute("SELECT Id FROM Ankieta")
-            ]
-            self.displayData()
-
-    def displayData(self):
-        with sqlite3.connect(self.dbFile) as connection:
-            connection.row_factory = sqlite3.Row
-            cursor = connection.cursor()
-
-            userData = cursor.execute(
-                "SELECT * FROM Ankieta WHERE Id=?", [self.userId]
-            ).fetchall()[0]
-            self.userData.setText(
-                dedent(
-                    f"""\
-                    Id: {userData['Id']}
-                    Płeć: {userData['Plec']}
-                    Wiek: {userData['Wiek']}
-                    Województwo zamieszkania: {userData['Wojewodztwo']}
-                    Jak często marzną dłonie/stopy: {userData['Marzniecie']}
-                    Jak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}
-                    Jak często bierze zimne kąpiele: {userData['ZimneKapiele']}
-                    Jak często morsuje: {userData['Morsowanie']}
-                    Choroby: {userData['Choroby']}
-                    Przyjmowane leki: {userData['Leki']}
-                    Temperatura badanego: {userData['TempBadanego']} °C
-                    Tetno początkowe badanego: {userData['TetnoPoczatkowe']}/min
-                    Ciśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']} mmHg
-                    Temperatura wody przed pierwszym badaniem: {userData['TempWodyDo1Badania']} °C
-                    Tętno po pierwszym badaniu: {userData['TetnoPo1Badaniu']}/min
-                    Ciśnienie po pierwszym badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']} mmHg
-                    Temperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']} °C
-                    Tętno po drugim badaniu: {userData['TetnoPo2Badaniu']}/min
-                    Ciśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']} mmHg
-                    """
-                )
+    def displaySurveyResults(self, userData):
+        self.userData.setText(
+            dedent(
+                f"""\
+                Id: {userData['Id']}
+                Płeć: {userData['Plec']}
+                Wiek: {userData['Wiek']}
+                Województwo zamieszkania: {userData['Wojewodztwo']}
+                Jak często marzną dłonie/stopy: {userData['Marzniecie']}
+                Jak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}
+                Jak często bierze zimne kąpiele: {userData['ZimneKapiele']}
+                Jak często morsuje: {userData['Morsowanie']}
+                Choroby: {userData['Choroby']}
+                Przyjmowane leki: {userData['Leki']}
+                Temperatura badanego: {userData['TempBadanego']} °C
+                Tetno początkowe badanego: {userData['TetnoPoczatkowe']}/min
+                Ciśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']} mmHg
+                Temperatura wody przed pierwszym badaniem: {userData['TempWodyDo1Badania']} °C
+                Tętno po pierwszym badaniu: {userData['TetnoPo1Badaniu']}/min
+                Ciśnienie po pierwszym badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']} mmHg
+                Temperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']} °C
+                Tętno po drugim badaniu: {userData['TetnoPo2Badaniu']}/min
+                Ciśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']} mmHg
+                """
             )
+        )
 
 
 if __name__ == "__main__":

@@ -93,7 +93,7 @@ class Ui_mainWindow(object):
         self.clearScene.setObjectName("clearScene")
         self.rightVertLayout.addWidget(self.clearScene)
         spacerItem1 = QtWidgets.QSpacerItem(
-            20, 30, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum
+            20, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Maximum
         )
         self.rightVertLayout.addItem(spacerItem1)
         self.userData = QtWidgets.QTextEdit(self.centralwidget)
@@ -129,9 +129,7 @@ class Ui_mainWindow(object):
         )
         self.playButton.setText(_translate("mainWindow", "Play"))
         self.pickDirectory.setText(_translate("mainWindow", "Wybierz plik wideo"))
-        self.showDataBase.setText(
-            _translate("mainWindow", "Wyświetl dane z bazy danych")
-        )
+        self.showDataBase.setText(_translate("mainWindow", "Wybierz plik bazy danych"))
         self.clearScene.setText(_translate("mainWindow", "Wyczyść zaznaczenie"))
         self.exitApplication.setText(_translate("mainWindow", "Wyjdź z programu"))
         self.exitApplication.setShortcut(_translate("mainWindow", "Esc"))
