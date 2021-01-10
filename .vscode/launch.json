@@ -8,7 +8,7 @@
             "name": "Python: Run project",
             "type": "python",
             "request": "launch",
-            "program": "application.py",
+            "program": "Aplikacja/application.py",
             "console": "integratedTerminal"
         }
     ]

@@ -1,4 +1,10 @@
 {
     "python.pythonPath": "C:\\Users\\klaud\\AppData\\Local\\Programs\\Python\\Python38\\python3.8.exe",
-    "pyqt-integration.pyuic.compile.filepath": "${ui_name}.py"
+    "pyqt-integration.pyuic.compile.filepath": "${ui_name}.py",
+    "python.autoComplete.extraPaths": [
+        "Aplikacja"
+    ],
+    "python.analysis.extraPaths": [
+        "Aplikacja"
+    ]
 }

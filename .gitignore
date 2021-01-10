@@ -1,9 +1,4 @@
 *.pyc
-Badania/
+__pycache__
+.mypy_cache
 *.db
-hand/
-handy-master/
-*.avi
-detectHand.py
-detectVidHand.py
-plotHistogram.py
