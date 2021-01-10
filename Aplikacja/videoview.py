@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import (
     QPainter,
     QPen,
+    QColor,
     QResizeEvent,
 )
 from PyQt5.QtCore import (
@@ -35,6 +36,7 @@ class VideoScene(QGraphicsScene):
         self.addItem(self.videoItem)
 
         self.rectangle = QGraphicsRectItem()
+        self.rectangle.setPen(QColor(0, 122, 217))
         self.addItem(self.rectangle)
 
     def videoSizeChanged(self, size: QSizeF):
