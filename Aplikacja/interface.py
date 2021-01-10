@@ -98,7 +98,7 @@ class Ui_mainWindow(object):
         self.rightVertLayout.addItem(spacerItem1)
         self.userData = QtWidgets.QTextEdit(self.centralwidget)
         self.userData.setEnabled(True)
-        self.userData.setMinimumSize(QtCore.QSize(400, 0))
+        self.userData.setMinimumSize(QtCore.QSize(480, 0))
         self.userData.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
         self.userData.setReadOnly(True)
         self.userData.setObjectName("userData")

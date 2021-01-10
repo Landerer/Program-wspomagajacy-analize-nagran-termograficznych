@@ -174,28 +174,30 @@ class Application(QObject, Ui_mainWindow):
                 self.userData.setText(f"Nie udało się otworzyć bazy danych:\n {e}")
 
     def displaySurveyResults(self, userData):
-        self.userData.setText(
+        self.userData.setHtml(
             dedent(
-                f"""\
-                Id: {userData['Id']}
-                Płeć: {userData['Plec']}
-                Wiek: {userData['Wiek']}
-                Województwo zamieszkania: {userData['Wojewodztwo']}
-                Jak często marzną dłonie/stopy: {userData['Marzniecie']}
-                Jak często bieleją lub sinieją dłonie/stopy: {userData['Sinienie']}
-                Jak często bierze zimne kąpiele: {userData['ZimneKapiele']}
-                Jak często morsuje: {userData['Morsowanie']}
-                Choroby: {userData['Choroby']}
-                Przyjmowane leki: {userData['Leki']}
-                Temperatura badanego: {userData['TempBadanego']} °C
-                Tetno początkowe badanego: {userData['TetnoPoczatkowe']}/min
-                Ciśnienie początkowe badanego: {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']} mmHg
-                Temperatura wody przed pierwszym badaniem: {userData['TempWodyDo1Badania']} °C
-                Tętno po pierwszym badaniu: {userData['TetnoPo1Badaniu']}/min
-                Ciśnienie po pierwszym badaniu: {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']} mmHg
-                Temperatura wody przed 2 badaniem: {userData['TempWodyDo2Badania']} °C
-                Tętno po drugim badaniu: {userData['TetnoPo2Badaniu']}/min
-                Ciśnienie po drugim badaniu: {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']} mmHg
+                f"""
+                <p>
+                <b>Id:</b> {userData['Id']}<br />
+                <b>Płeć:</b> {userData['Plec']}<br />
+                <b>Wiek:</b> {userData['Wiek']}<br />
+                <b>Województwo zamieszkania:</b> {userData['Wojewodztwo']}<br />
+                <b>Jak często marzną dłonie/stopy:</b> {userData['Marzniecie']}<br />
+                <b>Jak często bieleją lub sinieją dłonie/stopy:</b> {userData['Sinienie']}<br />
+                <b>Jak często bierze zimne kąpiele:</b> {userData['ZimneKapiele']}<br />
+                <b>Jak często morsuje:</b> {userData['Morsowanie']}<br />
+                <b>Choroby:</b> {userData['Choroby']}<br />
+                <b>Przyjmowane leki:</b> {userData['Leki']}<br />
+                </p>
+                <b>Temperatura badanego:</b> {userData['TempBadanego']} °C <br />
+                <b>Tetno początkowe badanego:</b> {userData['TetnoPoczatkowe']}/min <br />
+                <b>Ciśnienie początkowe badanego:</b> {userData['CisSkurczPoczatkowe']}/{userData['CisRozkurczPoczatkowe']} mmHg <br />
+                <b>Temperatura wody przed pierwszym badaniem:</b> {userData['TempWodyDo1Badania']} °C <br />
+                <b>Tętno po pierwszym badaniu:</b> {userData['TetnoPo1Badaniu']}/min <br />
+                <b>Ciśnienie po pierwszym badaniu:</b> {userData['CisSkurczPo1Badaniu']}/{userData['CisRozkurczPo1Badaniu']} mmHg <br />
+                <b>Temperatura wody przed drugim badaniem:</b> {userData['TempWodyDo2Badania']} °C <br />
+                <b>Tętno po drugim badaniu:</b> {userData['TetnoPo2Badaniu']}/min <br />
+                <b>Ciśnienie po drugim badaniu:</b> {userData['CisSkurczPo2Badaniu']}/{userData['CisRozkurczPo2Badaniu']} mmHg <br />
                 """
             )
         )
