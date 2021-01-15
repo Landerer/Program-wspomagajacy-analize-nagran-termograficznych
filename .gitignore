@@ -2,3 +2,6 @@
 __pycache__
 .mypy_cache
 *.db
+Aplikacja/lib
+Aplikacja/build
+Aplikacja/dist
