@@ -1,10 +1,16 @@
 # Objaw Raynauda
+## Spis treści
+1. [Opis](#opis)
+2. [Instalacja zależności](#instalacja-zależności)
+3. [Uruchamianie](#uruchamianie)
+4. [Tworzenie pliku EXE oraz instalatora](#tworzenie-pliku-exe-oraz-instalatora)
+
+## Opis
 ![Interfejs aplikacji](interface.png)
 Aplikacja wspomagająca diagnozę objawu Raynauda poprzez analizę wykonanych nagrań termowizyjnych, będących wynikiem badania, składającego się z dwóch prowokacji objawu Raynauda za pomocą zanurzania dłoni w zimnej wodzie, a następnie rejestracji procesu ogrzewania się dłoni, przy pomocy kamery termowizyjnej.
 
 Aplikacja umożliwia odtworzenie wykonanych nagrań termowizyjnych oraz wyświetlenie danych z bazy danych, zawierających dane z ankiety wypełnianej przez badanego oraz dane z raportu o badaniu. Aplikacja również umożliwia wykreślenie wykresu zmieniania się średniej temperatury w czasie na dowolnym obszarze nagrania termowizyjnego. 
 
-# Uruchamianie
 ## Instalacja zależności
 Moduły niezbędne do uruchomienia programu spisane są w pliku [requirements.txt](requirements.txt). Wszystkie moduły poza jednym dostępne są publicznie w repozytorium PyPI. Moduł `FileSDK` należy uprzednio zbudować własnoręcznie [wg poniższej instrukcji](#tworzenie-modułu-filesdk) i wynikowy plik _wheel_ umieścić w podfolderze `lib`.
 
@@ -29,6 +35,7 @@ Pod systemem Windows 10 należy więc zainstalować _Visual Studio Build Tools_.
 * Windows 10 SDK
 
 ## Uruchamianie
+Po zainstalowaniu wszystkich zależności, program można uruchomić następująco:
 ```
 python application.py
 ```
