@@ -32,3 +32,19 @@ Pod systemem Windows 10 należy więc zainstalować _Visual Studio Build Tools_.
 ```
 python application.py
 ```
+
+## Tworzenie pliku EXE oraz instalatora
+Istnieje możliwość zebrania wszystkich zależności w jednym folderze i stworzenia pliku EXE, który można uruchomić bez konieczności instalowania zależności. Służy do tego narzędzie `cx_Freeze`, które należy najpierw zainstalować:
+```
+python -m pip install cx_Freeze
+```
+### Tworzenie pliku EXE z załączonymi zależnościami:
+```
+python -m pip setup.py build
+```
+Wynik pojawi się w podfolderze `Aplikacja/build/exe*/ObjawRaynauda.exe`
+### Tworzenie pliku instalacyjnego MSI
+```
+python -m pip setup.py bdist_msi
+```
+Wynik pojawi się w podfolderze `Aplikacja/dist/ObjawRaynauda-*.msi`
