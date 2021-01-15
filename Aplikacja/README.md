@@ -12,6 +12,8 @@ Aplikacja wspomagająca diagnozę objawu Raynauda poprzez analizę wykonanych na
 Aplikacja umożliwia odtworzenie wykonanych nagrań termowizyjnych oraz wyświetlenie danych z bazy danych, zawierających dane z ankiety wypełnianej przez badanego oraz dane z raportu o badaniu. Aplikacja również umożliwia wykreślenie wykresu zmieniania się średniej temperatury w czasie na dowolnym obszarze nagrania termowizyjnego. 
 
 ## Instalacja zależności
+Aplikacja tworzona i testowana dla Pythona w wersji 3.8. Brak testów dla innych wersji.
+
 Moduły niezbędne do uruchomienia programu spisane są w pliku [requirements.txt](requirements.txt). Wszystkie moduły poza jednym dostępne są publicznie w repozytorium PyPI. Moduł `FileSDK` należy uprzednio zbudować własnoręcznie [wg poniższej instrukcji](#tworzenie-modułu-filesdk) i wynikowy plik _wheel_ umieścić w podfolderze `lib`.
 
 W celu instalacji modułów należy w linii poleceń wywołać:
