@@ -51,11 +51,6 @@ def wyslij():
     )
     connection.commit()
 
-    if os.path.exists("ankieta-copy.db"):
-        os.remove("ankieta-copy.db")
-
-    copyfile("ankieta.db", "ankieta-copy.db")
-
     return render_template("ankietaKoniec.html")
 
 
