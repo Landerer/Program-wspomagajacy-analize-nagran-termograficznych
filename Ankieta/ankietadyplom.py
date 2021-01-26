@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request
 import sqlite3
 from pprint import pprint
-from shutil import copyfile
-import os
 
 app = Flask(__name__)
 
